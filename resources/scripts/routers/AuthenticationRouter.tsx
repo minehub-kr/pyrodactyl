@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import ForgotPasswordContainer from '@/components/auth/ForgotPasswordContainer';
 import LoginCheckpointContainer from '@/components/auth/LoginCheckpointContainer';
 import LoginContainer from '@/components/auth/LoginContainer';
+import LoginContainerWithId from '@/components/auth/LoginContainerWithId';
 import ResetPasswordContainer from '@/components/auth/ResetPasswordContainer';
 import { NotFound } from '@/components/elements/ScreenBlock';
 
@@ -16,6 +17,7 @@ export default () => {
         >
             <Routes>
                 <Route path='login' element={<LoginContainer />} />
+                <Route path='login-with-id' element={<LoginContainerWithId />} />
                 <Route path='login/checkpoint/*' element={<LoginCheckpointContainer />} />
                 <Route path='password' element={<ForgotPasswordContainer />} />
                 <Route path='password/reset/:token' element={<ResetPasswordContainer />} />
