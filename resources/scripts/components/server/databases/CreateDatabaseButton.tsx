@@ -21,14 +21,14 @@ interface Values {
 
 const schema = object().shape({
     databaseName: string()
-        .required('A database name must be provided.')
-        .min(3, 'Database name must be at least 3 characters.')
-        .max(48, 'Database name must not exceed 48 characters.')
+        .required('데이터베이스 이름을 입력해야 합니다.')
+        .min(3, '데이터베이스 이름은 최소 3자 이상이어야 합니다.')
+        .max(48, '데이터베이스 이름은 최대 48자 이하여야 합니다.')
         .matches(
             /^[\w\-.]{3,48}$/,
-            'Database name should only contain alphanumeric characters, underscores, dashes, and/or periods.',
+            '데이터베이스 이름은 영숫자, 밑줄, 대시 및/또는 마침표만 포함해야 합니다.',
         ),
-    connectionsFrom: string().matches(/^[\w\-/.%:]+$/, 'A valid host address must be provided.'),
+    connectionsFrom: string().matches(/^[\w\-/.%:]+$/, '유효한 호스트 주소를 입력해야 합니다.'),
 });
 
 export default () => {
@@ -70,7 +70,7 @@ export default () => {
                             resetForm();
                             setVisible(false);
                         }}
-                        title='Create new database'
+                        title='새 데이터베이스 생성'
                     >
                         <div className='flex flex-col'>
                             <FlashMessageRender byKey={'database:create'} />
@@ -79,22 +79,22 @@ export default () => {
                                     type={'string'}
                                     id={'database_name'}
                                     name={'databaseName'}
-                                    label={'Database Name'}
-                                    description={'A descriptive name for your database instance.'}
+                                    label={'데이터베이스 이름'}
+                                    description={'데이터베이스 인스턴스에 대한 설명 이름입니다.'}
                                 />
                                 <div className={`mt-6`}>
                                     <Field
                                         type={'string'}
                                         id={'connections_from'}
                                         name={'connectionsFrom'}
-                                        label={'Connections From'}
+                                        label={'연결 허용 범위'}
                                         description={
-                                            'Where connections should be allowed from. Leave blank to allow connections from anywhere.'
+                                            '어디에서 연결을 허용할지 입력하세요. 비워두면 모든 곳에서 연결을 허용합니다.'
                                         }
                                     />
                                 </div>
                                 <div className={`flex gap-3 justify-end my-6`}>
-                                    <Button type={'submit'}>Create Database</Button>
+                                    <Button type={'submit'}>데이터베이스 생성</Button>
                                 </div>
                             </Form>
                         </div>
@@ -109,7 +109,7 @@ export default () => {
                 className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-full text-sm font-bold shadow-md'
                 onClick={() => setVisible(true)}
             >
-                New Database
+                새 데이터베이스
             </button>
         </>
     );

@@ -23,7 +23,7 @@ const CopyOnClick = ({ text, children, showInNotification }: CopyOnClickProps) =
 
     useEffect(() => {
         if (!copied) return;
-        toast(`Copied ${truncatedText} to clipboard.`);
+        toast(`${truncatedText}(이)가 클립보드에 복사되었어요.`);
 
         const timeout = setTimeout(() => {
             setCopied(false);
@@ -41,16 +41,16 @@ const CopyOnClick = ({ text, children, showInNotification }: CopyOnClickProps) =
     const child = !text
         ? React.Children.only(children)
         : React.cloneElement(React.Children.only(children), {
-              // @ts-ignore
-              className: clsx(children.props.className || '', 'cursor-pointer'),
-              onClick: (e: React.MouseEvent<HTMLElement>) => {
-                  copy(String(text));
-                  setCopied(true);
-                  if (typeof children.props.onClick === 'function') {
-                      children.props.onClick(e);
-                  }
-              },
-          });
+            // @ts-ignore
+            className: clsx(children.props.className || '', 'cursor-pointer'),
+            onClick: (e: React.MouseEvent<HTMLElement>) => {
+                copy(String(text));
+                setCopied(true);
+                if (typeof children.props.onClick === 'function') {
+                    children.props.onClick(e);
+                }
+            },
+        });
 
     return <>{child}</>;
 };

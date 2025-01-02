@@ -41,14 +41,14 @@ export default () => {
     }, []);
 
     return (
-        <ServerContentBlock title={'Databases'}>
+        <ServerContentBlock title={'데이터베이스'}>
             <FlashMessageRender byKey={'databases'} />
-            <MainPageHeader title={'Databases'}>
+            <MainPageHeader title={'데이터베이스'}>
                 <Can action={'database.create'}>
                     <div className={`flex flex-col sm:flex-row items-center justify-end`}>
                         {databaseLimit > 0 && databases.length > 0 && (
                             <p className={`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0 text-right`}>
-                                {databases.length} of {databaseLimit} databases
+                                {databases.length}개의 데이터베이스 (최대 {databaseLimit}개)
                             </p>
                         )}
                         {databaseLimit > 0 && databaseLimit !== databases.length && <CreateDatabaseButton />}
@@ -71,8 +71,8 @@ export default () => {
                     ) : (
                         <p className={`text-center text-sm text-zinc-300`}>
                             {databaseLimit > 0
-                                ? 'Your server does not have any databases.'
-                                : 'Databases cannot be created for this server.'}
+                                ? '내 서버에는 데이터베이스가 없어요.'
+                                : '이 서버는 데이터베이스를 만들 수 없어요.'}
                         </p>
                     )}
                 </>

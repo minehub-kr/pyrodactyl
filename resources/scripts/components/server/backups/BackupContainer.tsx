@@ -34,20 +34,20 @@ const BackupContainer = () => {
 
     if (!backups || (error && isValidating)) {
         return (
-            <ServerContentBlock title={'Backups'}>
-                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>Backups</h1>
+            <ServerContentBlock title={'백업'}>
+                <h1 className='text-[52px] font-extrabold leading-[98%] tracking-[-0.14rem]'>백업</h1>
             </ServerContentBlock>
         );
     }
 
     return (
-        <ServerContentBlock title={'Backups'}>
-            <MainPageHeader title={'Backups'}>
+        <ServerContentBlock title={'백업'}>
+            <MainPageHeader title={'백업'}>
                 <Can action={'backup.create'}>
                     <div className={`flex flex-col sm:flex-row items-center justify-end`}>
                         {backupLimit > 0 && backups.backupCount > 0 && (
                             <p className={`text-sm text-zinc-300 mb-4 sm:mr-6 sm:mb-0 text-right`}>
-                                {backups.backupCount} of {backupLimit} backups
+                                {backups.backupCount}개의 백업 (최대 {backupLimit}개)
                             </p>
                         )}
                         {backupLimit > 0 && backupLimit > backups.backupCount && <CreateBackupButton />}
@@ -63,8 +63,8 @@ const BackupContainer = () => {
                         !backupLimit ? null : (
                             <p className={`text-center text-sm text-zinc-300`}>
                                 {page > 1
-                                    ? "Looks like we've run out of backups to show you, try going back a page."
-                                    : 'Your server does not have any backups.'}
+                                    ? '표시할 백업이 더 이상 없어요.'
+                                    : '서버에 백업이 없어요.'}
                             </p>
                         )
                     ) : (
@@ -77,7 +77,7 @@ const BackupContainer = () => {
                 }
             </Pagination>
             {backupLimit === 0 && (
-                <p className={`text-center text-sm text-zinc-300`}>Backups cannot be created for this server.</p>
+                <p className={`text-center text-sm text-zinc-300`}>이 서버는 백업을 만들 수 없어요.</p>
             )}
         </ServerContentBlock>
     );

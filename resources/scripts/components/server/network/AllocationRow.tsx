@@ -76,13 +76,13 @@ const AllocationRow = ({ allocation }: Props) => {
                         </CopyOnClick>
                     )}
                     <label className='uppercase text-xs mt-1 text-zinc-400 block px-1 select-none transition-colors duration-150'>
-                        {allocation.alias ? 'Hostname' : 'IP Address'}
+                        {allocation.alias ? '호스트이름' : 'IP 주소'}
                     </label>
                 </div>
                 <div className={'w-16 md:w-24 overflow-hidden'}>
                     <Code dark>{allocation.port}</Code>
                     <label className='uppercase text-xs mt-1 text-zinc-400 block px-1 select-none transition-colors duration-150'>
-                        Port
+                        포트
                     </label>
                 </div>
             </div>
@@ -98,7 +98,7 @@ const AllocationRow = ({ allocation }: Props) => {
             </div>
             <div className={'flex justify-end space-x-4 mt-4 w-full md:mt-0 md:w-48'}>
                 {allocation.isDefault ? (
-                    <p>Primary Port</p>
+                    <p>주요 포트</p>
                 ) : (
                     <>
                         <Can action={'allocation.delete'}>
@@ -106,7 +106,7 @@ const AllocationRow = ({ allocation }: Props) => {
                         </Can>
                         <Can action={'allocation.update'}>
                             <Button.Text size={Button.Sizes.Small} onClick={setPrimaryAllocation}>
-                                Make Primary
+                                주요 포트로 설정
                             </Button.Text>
                         </Can>
                     </>

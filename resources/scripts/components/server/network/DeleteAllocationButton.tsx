@@ -39,13 +39,13 @@ const DeleteAllocationButton = ({ allocation }: Props) => {
             <Dialog.Confirm
                 open={confirm}
                 onClose={() => setConfirm(false)}
-                title={'Remove Allocation'}
-                confirm={'Delete'}
+                title={'할당 제거'}
+                confirm={'삭제'}
                 onConfirmed={deleteAllocation}
             >
-                This allocation will be immediately removed from your server.
+                이 할당은 서버에서 즉시 제거됩니다.
             </Dialog.Confirm>
-            <button onClick={() => setConfirm(true)}>Delete</button>
+            <button onClick={() => setConfirm(true)}>삭제</button>
         </>
     );
 };

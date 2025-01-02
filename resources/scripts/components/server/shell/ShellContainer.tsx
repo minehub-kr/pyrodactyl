@@ -293,23 +293,21 @@ const SoftwareContainer = () => {
     };
 
     return (
-        <ServerContentBlock title='Software'>
-            <MainPageHeader direction='column' title='Software'>
+        <ServerContentBlock title='소프트웨어'>
+            <MainPageHeader direction='column' title='소프트웨어'>
                 <h2 className='text-sm'>
-                    Welcome to the software management page. Here you can change the game or software that is running on
-                    your server.
+                    소프트웨어 관리 페이지에 오신 것을 환영합니다. 여기에서 서버에서 실행 중인 게임 또는 소프트웨어를 변경할 수 있습니다.
                 </h2>
             </MainPageHeader>
 
             <Dialog.Confirm
                 open={modalVisible}
-                title={'Confirm server reinstallation'}
-                confirm={'Yes, reinstall server'}
+                title={'서버 재설치 확인'}
+                confirm={'서버 재설치하기'}
                 onClose={() => setModalVisible(false)}
                 onConfirmed={() => handleEggSelect()}
             >
-                Your server will be stopped and some files may be deleted or modified during this process, are you sure
-                you wish to continue?
+                서버가 중지되고 이 과정에서 일부 파일이 삭제되거나 수정될 수 있어요. 계속할까요?
             </Dialog.Confirm>
 
             {!visible && (
@@ -319,10 +317,10 @@ const SoftwareContainer = () => {
                             <div className='flex items-center gap-2'>
                                 <HugeIconsEggs fill='currentColor' />
                                 <div className='flex flex-col'>
-                                    <h1 className='text-2xl'>Current Egg</h1>
+                                    <h1 className='text-2xl'>현재 Egg</h1>
                                     {currentEggName &&
                                         (currentEggName?.includes(blank_egg_prefix) ? (
-                                            <p className='text-neutral-300 text-sm'>Please select a egg</p>
+                                            <p className='text-neutral-300 text-sm'>Egg를 선택해주세요</p>
                                         ) : (
                                             <p className='text-neutral-300 text-sm'>{currentEggName}</p>
                                         ))}
@@ -332,7 +330,7 @@ const SoftwareContainer = () => {
                                 className='rounded-full border-[1px] border-[#ffffff12] px-4 py-2 text-sm font-bold shadow-md hover:border-[#ffffff22] hover:shadow-lg bg-gradient-to-b from-[#ffffff10] to-[#ffffff09] text-white'
                                 onClick={() => setVisible(true)}
                             >
-                                Change Egg
+                                Egg 변경
                             </button>
                         </div>
                     </div>
@@ -383,11 +381,10 @@ const SoftwareContainer = () => {
                                             nest.attributes.name.includes(hidden_nest_prefix) ? null : (
                                                 <div
                                                     key={nest.attributes.uuid}
-                                                    className={`cursor-pointer bg-[#3333332a] border-[1px] p-4 rounded-lg w-full text-left ${
-                                                        selectedNest?.attributes.uuid === nest.attributes.uuid
-                                                            ? 'border-[#555555ef]'
-                                                            : 'border-[#55555540]'
-                                                    }`}
+                                                    className={`cursor-pointer bg-[#3333332a] border-[1px] p-4 rounded-lg w-full text-left ${selectedNest?.attributes.uuid === nest.attributes.uuid
+                                                        ? 'border-[#555555ef]'
+                                                        : 'border-[#55555540]'
+                                                        }`}
                                                 >
                                                     <div className='flex items-center justify-between'>
                                                         <p className='text-neutral-200 text-md'>
@@ -412,11 +409,10 @@ const SoftwareContainer = () => {
                                             currentEgg === egg.attributes.uuid ? null : (
                                                 <div
                                                     key={egg.attributes.uuid}
-                                                    className={`cursor-pointer border p-4 rounded-lg bg-[#3333332a] w-full ${
-                                                        selectedEgg?.attributes.uuid === egg.attributes.uuid
-                                                            ? 'border-[#555555ef]'
-                                                            : 'border-[#55555540]'
-                                                    }`}
+                                                    className={`cursor-pointer border p-4 rounded-lg bg-[#3333332a] w-full ${selectedEgg?.attributes.uuid === egg.attributes.uuid
+                                                        ? 'border-[#555555ef]'
+                                                        : 'border-[#55555540]'
+                                                        }`}
                                                 >
                                                     <div className='flex items-center justify-between'>
                                                         <p className='text-neutral-300 text-md'>
@@ -428,7 +424,7 @@ const SoftwareContainer = () => {
                                                                 setModalVisible(true);
                                                             }}
                                                         >
-                                                            Select
+                                                            선택
                                                         </Button>
                                                     </div>
                                                     <p className='text-neutral-400 text-xs mt-2'>
@@ -442,10 +438,9 @@ const SoftwareContainer = () => {
                             )) ||
                                 (step == 1 && (
                                     <div className='flex items-center justify-center h-[63svh]'>
-                                        <p className='text-neutral-300 '>Please select a game first</p>
+                                        <p className='text-neutral-300 '>게임을 먼저 선택해주세요.</p>
                                     </div>
                                 ))}
-
                             {(step == 2 && selectedEgg && !currentEggName?.includes(blank_egg_prefix) && (
                                 <div className='flex flex-col gap-4'>
                                     <div className='grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4'>
@@ -457,14 +452,13 @@ const SoftwareContainer = () => {
                                                             htmlFor='backup'
                                                             className='text-neutral-300 text-md font-bold'
                                                         >
-                                                            Backups
+                                                            백업
                                                         </label>
                                                         <label
                                                             htmlFor='backup'
                                                             className='text-neutral-500 text-sm font-semibold'
                                                         >
-                                                            Would you like to create a backup before continuing? Some
-                                                            data may be modified for removed during the process.
+                                                            계속하기 전에 백업을 생성하시겠습니까? 이 과정에서 일부 데이터가 수정되거나 삭제될 수 있습니다.
                                                         </label>
                                                     </div>
                                                     <Switch
@@ -480,15 +474,13 @@ const SoftwareContainer = () => {
                                                             htmlFor='backup'
                                                             className='text-neutral-300 text-md font-bold'
                                                         >
-                                                            Backups
+                                                            백업
                                                         </label>
                                                         <label
                                                             htmlFor='backup'
                                                             className='text-neutral-500 text-sm font-semibold'
                                                         >
-                                                            You have reached the backup limit for this server. If you
-                                                            wish to create a backup cancel now and delete one or more
-                                                            existing backups
+                                                            이 서버의 백업 한도에 도달했습니다. 백업을 생성하려면 지금 취소하고 기존 백업을 하나 이상 삭제하십시오.
                                                         </label>
                                                     </div>
                                                     <Switch name='backup' disabled />
@@ -498,14 +490,13 @@ const SoftwareContainer = () => {
                                         <div className='flex items-center justify-between gap-2 bg-[#3333332a] border-[1px] border-[#ffffff0e] p-4 rounded-lg'>
                                             <div className='flex flex-col'>
                                                 <label htmlFor='wipe' className='text-neutral-300 text-md font-bold'>
-                                                    Wipe Data
+                                                    데이터 삭제
                                                 </label>
                                                 <label
                                                     htmlFor='wipe'
                                                     className='text-neutral-500 text-sm font-semibold'
                                                 >
-                                                    In some cases you might want to completely wipe your server like if
-                                                    you are changing to a different game.
+                                                    다른 게임으로 변경하는 경우와 같이 서버를 완전히 삭제하고 싶을 때가 있습니다.
                                                 </label>
                                             </div>
                                             <Switch
@@ -550,7 +541,7 @@ const SoftwareContainer = () => {
                             )) ||
                                 (step == 2 && !currentEggName?.includes(blank_egg_prefix) && (
                                     <div className='flex items-center justify-center h-[63svh]'>
-                                        <p className='text-neutral-300 '>Please select a egg first</p>
+                                        <p className='text-neutral-300 '>Egg를 먼저 선택하세요.</p>
                                     </div>
                                 ))}
                         </div>
@@ -566,10 +557,9 @@ const SoftwareContainer = () => {
                             className='w-[40px] h-[40px] m-2 mr-0 text-brand hidden md:block'
                         />
                         <div className='flex flex-col pb-1  m-2'>
-                            <h1 className='text-xl'>Danger Zone</h1>
+                            <h1 className='text-xl'>위험 구역</h1>
                             <p className='text-sm text-neutral-300'>
-                                During this process some files may be deleted or modified either make a backup before
-                                hand or pick the option when prompted.
+                                이 곳에 있는 과정을 진행하면서 서버의 파일이 삭제되거나 수정될 수 있으니 사전에 백업을 하거나 프롬프트 시 옵션을 선택하세요.
                             </p>
                         </div>
                     </div>

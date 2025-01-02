@@ -25,9 +25,9 @@ export default () => {
     const sftp = ServerContext.useStoreState((state) => state.server.data!.sftpDetails, isEqual);
 
     return (
-        <ServerContentBlock title={'Settings'}>
+        <ServerContentBlock title={'설정'}>
             <FlashMessageRender byKey={'settings'} />
-            <MainPageHeader title={'Settings'} />
+            <MainPageHeader title={'설정'} />
             <Can action={'settings.rename'}>
                 <div className={`mb-6 md:mb-10`}>
                     <RenameServerBox />
@@ -37,22 +37,22 @@ export default () => {
                 <Can action={'settings.reinstall'}>
                     <ReinstallServerBox />
                 </Can>
-                <TitledGreyBox title={'Debug Information'}>
+                <TitledGreyBox title={'디버그 정보'}>
                     <div className={`flex items-center justify-between text-sm`}>
-                        <p>Node</p>
+                        <p>노드</p>
                         <code className={`font-mono bg-zinc-900 rounded py-1 px-2`}>{node}</code>
                     </div>
                     <CopyOnClick text={uuid}>
                         <div className={`flex items-center justify-between mt-2 text-sm`}>
-                            <p>Server ID</p>
+                            <p>서버 ID</p>
                             <code className={`font-mono bg-zinc-900 rounded py-1 px-2`}>{uuid}</code>
                         </div>
                     </CopyOnClick>
                 </TitledGreyBox>
                 <Can action={'file.sftp'}>
-                    <TitledGreyBox title={'SFTP Details'} className={`mb-6 md:mb-10`}>
+                    <TitledGreyBox title={'SFTP 세부 정보'} className={`mb-6 md:mb-10`}>
                         <div className={`flex items-center justify-between text-sm`}>
-                            <Label>Server Address</Label>
+                            <Label>서버 주소</Label>
                             <CopyOnClick text={`sftp://${ip(sftp.ip)}:${sftp.port}`}>
                                 <code
                                     className={`font-mono bg-zinc-900 rounded py-1 px-2`}
@@ -60,7 +60,7 @@ export default () => {
                             </CopyOnClick>
                         </div>
                         <div className={`mt-2 flex items-center justify-between text-sm`}>
-                            <Label>Username</Label>
+                            <Label>사용자 이름</Label>
                             <CopyOnClick text={`${username}.${id}`}>
                                 <code className={`font-mono bg-zinc-900 rounded py-1 px-2`}>{`${username}.${id}`}</code>
                             </CopyOnClick>
@@ -69,13 +69,13 @@ export default () => {
                             <div className={`flex-1`}>
                                 <div className={`border-l-4 border-brand p-3`}>
                                     <p className={`text-xs text-zinc-200`}>
-                                        Your SFTP password is the same as the password you use to access this panel.
+                                        SFTP 비밀번호는 이 패널에 접근하는 데 사용하는 비밀번호와 동일합니다.
                                     </p>
                                 </div>
                             </div>
                             <div className={`ml-4`}>
                                 <a href={`sftp://${username}.${id}@${ip(sftp.ip)}:${sftp.port}`}>
-                                    <Button.Text variant={Button.Variants.Secondary}>Launch SFTP</Button.Text>
+                                    <Button.Text variant={Button.Variants.Secondary}>SFTP 실행</Button.Text>
                                 </a>
                             </div>
                         </div>

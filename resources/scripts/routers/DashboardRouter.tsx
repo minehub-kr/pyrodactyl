@@ -83,9 +83,8 @@ export default () => {
         <Fragment key={'dashboard-router'}>
             <button
                 id='sidebarToggle'
-                className={`lg:hidden fixed top-4 left-4 z-50 bg-transparent p-2 rounded-md text-white ${
-                    isSidebarVisible ? 'left-[300px]' : 'left-4'
-                }`}
+                className={`lg:hidden fixed top-4 left-4 z-50 bg-transparent p-2 rounded-md text-white ${isSidebarVisible ? 'left-[300px]' : 'left-4'
+                    }`}
                 onClick={toggleSidebar}
             >
                 <svg
@@ -162,7 +161,7 @@ export default () => {
                 <ul data-pyro-subnav-routes-wrapper='' className='pyro-subnav-routes-wrapper'>
                     <NavLink to={'/'} end className='flex flex-row items-center' ref={NavigationHome}>
                         <HugeIconsHome fill='currentColor' />
-                        <p>Servers</p>
+                        <p>내 서버</p>
                     </NavLink>
                     {/*
                     <NavLink to={'/account/api'} end className='flex flex-row items-center' ref={NavigationApi}>

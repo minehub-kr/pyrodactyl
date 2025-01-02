@@ -83,7 +83,7 @@ export default () => {
         );
 
     const handlePowerChangeEvent = (state: string) =>
-        terminal.writeln(TERMINAL_PRELUDE + 'Server marked as ' + state + '...\u001b[0m');
+        terminal.writeln(TERMINAL_PRELUDE + '서버가 ' + state + ' 상태로 지정되었어요...\u001b[0m');
 
     const handleCommandKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'ArrowUp') {
@@ -216,7 +216,7 @@ export default () => {
                         <input
                             className={clsx('peer', styles.command_input)}
                             type={'text'}
-                            placeholder={'Enter a command'}
+                            placeholder={'명령어를 입력하세요'}
                             aria-label={'Console command input.'}
                             disabled={!instance || !connected}
                             onKeyDown={handleCommandKeyDown}

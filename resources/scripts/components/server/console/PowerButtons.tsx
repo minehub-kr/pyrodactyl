@@ -28,11 +28,11 @@ export default ({ className }: PowerButtonProps) => {
 
         if (instance) {
             if (action === 'start') {
-                toast.success('Your server is starting!');
+                toast.success('서버가 시작됩니다!');
             } else if (action === 'restart') {
-                toast.success('Your server is restarting.');
+                toast.success('서버가 재시작됩니다.');
             } else {
-                toast.success('Your server is being stopped.');
+                toast.success('서버가 중지됩니다.');
             }
             setOpen(false);
             instance.send('set state', action === 'kill-confirmed' ? 'kill' : action);
@@ -61,32 +61,32 @@ export default ({ className }: PowerButtonProps) => {
                 open={open}
                 hideCloseIcon
                 onClose={() => setOpen(false)}
-                title={'Forcibly Stop Process'}
-                confirm={'Continue'}
+                title={'강제 종료 확인'}
+                confirm={'계속'}
                 onConfirmed={onButtonClick.bind(this, 'kill-confirmed')}
             >
-                Forcibly stopping a server can lead to data corruption.
+                강제로 서버를 종료하면 데이터 손실로 이어질 가능성이 있어요.
             </Dialog.Confirm>
             <Can action={'control.start'}>
                 <button
                     style={
                         status === 'offline'
                             ? {
-                                  background:
-                                      'radial-gradient(109.26% 109.26% at 49.83% 13.37%, #FF343C 0%, #F06F53 100%)',
-                                  opacity: 1,
-                              }
+                                background:
+                                    'radial-gradient(109.26% 109.26% at 49.83% 13.37%, #FF343C 0%, #F06F53 100%)',
+                                opacity: 1,
+                            }
                             : {
-                                  background:
-                                      'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
-                                  opacity: 0.5,
-                              }
+                                background:
+                                    'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
+                                opacity: 0.5,
+                            }
                     }
                     className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-l-full rounded-r-md text-sm font-bold shadow-md'
                     disabled={status !== 'offline'}
                     onClick={onButtonClick.bind(this, 'start')}
                 >
-                    Start
+                    시작
                 </button>
             </Can>
             <Can action={'control.restart'}>
@@ -99,7 +99,7 @@ export default ({ className }: PowerButtonProps) => {
                     disabled={!status}
                     onClick={onButtonClick.bind(this, 'restart')}
                 >
-                    Restart
+                    재시작
                 </button>
             </Can>
             <Can action={'control.stop'}>
@@ -107,21 +107,21 @@ export default ({ className }: PowerButtonProps) => {
                     style={
                         status === 'offline'
                             ? {
-                                  background:
-                                      'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
-                                  opacity: 0.5,
-                              }
+                                background:
+                                    'radial-gradient(124.75% 124.75% at 50.01% -10.55%, rgb(36, 36, 36) 0%, rgb(20, 20, 20) 100%)',
+                                opacity: 0.5,
+                            }
                             : {
-                                  background:
-                                      'radial-gradient(109.26% 109.26% at 49.83% 13.37%, #FF343C 0%, #F06F53 100%)',
-                                  opacity: 1,
-                              }
+                                background:
+                                    'radial-gradient(109.26% 109.26% at 49.83% 13.37%, #FF343C 0%, #F06F53 100%)',
+                                opacity: 1,
+                            }
                     }
                     className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-r-full rounded-l-md text-sm font-bold shadow-md transition-all'
                     disabled={status === 'offline'}
                     onClick={onButtonClick.bind(this, killable ? 'kill' : 'stop')}
                 >
-                    {killable ? 'Kill' : 'Stop'}
+                    {killable ? '강제 종료' : '종료'}
                 </button>
             </Can>
         </div>

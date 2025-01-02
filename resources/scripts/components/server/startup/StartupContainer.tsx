@@ -97,11 +97,10 @@ const StartupContainer = () => {
             <ServerError title={'Oops!'} message={httpErrorToHuman(error)} />
         )
     ) : (
-        <ServerContentBlock title={'Startup Settings'} showFlashKey={'startup:image'}>
-            <MainPageHeader direction='column' title='Startup Settings'>
+        <ServerContentBlock title={'시작 설정'} showFlashKey={'startup:image'}>
+            <MainPageHeader direction='column' title='시작 설정'>
                 <h2 className='text-sm'>
-                    These settings are used to control how your server starts up. Please be careful when modifying these
-                    settings as they can cause your server to become inoperable.
+                    이 설정은 서버 시작 방식을 제어하는 데 사용됩니다. 이 설정을 수정할 때는 서버가 작동하지 않을 수 있으므로 주의하세요.
                 </h2>
             </MainPageHeader>
             <div className={`flex gap-8 lg:flex-row flex-col`}>
@@ -112,7 +111,7 @@ const StartupContainer = () => {
                         </div>
                     </CopyOnClick>
                 </TitledGreyBox>
-                <TitledGreyBox title={'Docker Image'} className='min-w-80'>
+                <TitledGreyBox title={'Docker 이미지'} className='min-w-80'>
                     {Object.keys(data.dockerImages).length > 1 && !isCustomImage ? (
                         <>
                             <InputSpinner visible={loading}>
@@ -155,8 +154,7 @@ const StartupContainer = () => {
                                 </DropdownMenu>
                             </InputSpinner>
                             <p className={`text-xs mt-2`}>
-                                This is an advanced feature allowing you to select a Docker image to use when running
-                                this server instance.
+                                이 기능은 서버 인스턴스를 실행할 때 사용할 Docker 이미지를 선택할 수 있는 고급 기능입니다.
                             </p>
                         </>
                     ) : (
@@ -164,8 +162,7 @@ const StartupContainer = () => {
                             <span className={`text-neutral-400`}>{variables.dockerImage}</span>
                             {isCustomImage && (
                                 <p className={`text-xs text-zinc-300 mt-2`}>
-                                    This {"server's"} Docker image has been manually set by an administrator and cannot
-                                    be changed through this UI.
+                                    이 서버의 Docker 이미지는 관리자가 수동으로 설정했으며 이 UI를 통해 변경할 수 없습니다.
                                 </p>
                             )}
                         </>
@@ -174,7 +171,7 @@ const StartupContainer = () => {
             </div>
             {data && (
                 <>
-                    <h3 className={`mt-8 mb-4 text-2xl font-extrabold`}>Variables</h3>
+                    <h3 className={`mt-8 mb-4 text-2xl font-extrabold`}>변수</h3>
                     <div className='h-[47svh] flex flex-col justify-between'>
                         <div className={`grid gap-2 md:grid-cols-2`}>
                             {paginatedVariables.map((variable) => (

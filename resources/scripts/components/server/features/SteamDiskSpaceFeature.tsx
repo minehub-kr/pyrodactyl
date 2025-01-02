@@ -48,27 +48,23 @@ const SteamDiskSpaceFeature = () => {
             dismissable={false}
             closeOnBackground={false}
             closeButton={true}
-            title='Out of available disk space'
+            title='사용 가능한 디스크 공간 부족'
         >
             <FlashMessageRender key={'feature:steamDiskSpace'} />
             <div className={`flex-col`}>
                 {isAdmin ? (
                     <>
                         <p>
-                            This server has run out of available disk space and cannot complete the install or update
-                            process.
+                            이 서버는 사용 가능한 디스크 공간이 부족하여 설치 또는 업데이트 프로세스를 완료할 수 없습니다.
                         </p>
                         <p className='mt-3'>
-                            Ensure the machine has enough disk space by typing{' '}
-                            <code className={`font-mono bg-zinc-900 rounded py-1 px-2`}>df -h</code> on the machine
-                            hosting this server. Delete files or increase the available disk space to resolve the issue.
+                            서버를 호스팅하는 기기에서 <code className={`font-mono bg-zinc-900 rounded py-1 px-2`}>df -h</code> 명령어를 입력하여 디스크 공간을 확인하세요. 파일을 삭제하거나 사용 가능한 디스크 공간을 늘려 문제를 해결하세요.
                         </p>
                     </>
                 ) : (
                     <>
                         <p className={`mt-4`}>
-                            This server has run out of available disk space and cannot complete the install or update
-                            process. Please get in touch with the administrator(s) and inform them of disk space issues.
+                            이 서버는 사용 가능한 디스크 공간이 부족하여 설치 또는 업데이트 프로세스를 완료할 수 없습니다. 관리자에게 문의하여 디스크 공간 문제를 알려주세요.
                         </p>
                     </>
                 )}

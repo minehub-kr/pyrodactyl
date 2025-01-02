@@ -104,7 +104,7 @@ export default () => {
                 }}
             >
                 <ChartBlock
-                    title={'Network Activity'}
+                    title={'네트워크 활동'}
                     legend={
                         <>
                             {/* FIXME: add icons legend back */}

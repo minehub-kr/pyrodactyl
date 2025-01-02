@@ -29,24 +29,23 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
     const { isSubmitting } = useFormikContext<Values>();
 
     return (
-        <Modal {...props} showSpinnerOverlay={isSubmitting} title='Create server backup'>
+        <Modal {...props} showSpinnerOverlay={isSubmitting} title='서버 백업 생성'>
             <Form>
                 <FlashMessageRender byKey={'backups:create'} />
                 <Field
                     name={'name'}
-                    label={'Backup name'}
-                    description={'If provided, the name that should be used to reference this backup.'}
+                    label={'백업 이름'}
+                    description={'제공된 경우, 이 백업을 참조하는 데 사용될 이름입니다.'}
                 />
                 <div className={`mt-6 flex flex-col`}>
                     <FormikFieldWrapper
                         className='flex flex-col gap-2'
                         name={'ignored'}
-                        label={'Ignored Files & Directories'}
+                        label={'무시된 파일 및 디렉토리'}
                         description={`
-                            Enter the files or folders to ignore while generating this backup. Leave blank to use
-                            the contents of the .pteroignore file in the root of the server directory if present.
-                            Wildcard matching of files and folders is supported in addition to negating a rule by
-                            prefixing the path with an exclamation point.
+                            이 백업을 생성하는 동안 무시할 파일 또는 폴더를 입력하세요. 비워두면 서버 디렉토리의 루트에 있는
+                            .pteroignore 파일의 내용을 사용합니다. 파일 및 폴더의 와일드카드 매칭이 지원되며, 경로 앞에 느낌표를
+                            붙여 규칙을 부정할 수 있습니다.
                         `}
                     >
                         <FormikField
@@ -61,14 +60,14 @@ const ModalContent = ({ ...props }: RequiredModalProps) => {
                     <div className={`my-6`}>
                         <FormikSwitchV2
                             name={'isLocked'}
-                            label={'Locked'}
-                            description={'Prevents this backup from being deleted until explicitly unlocked.'}
+                            label={'잠금'}
+                            description={'명시적으로 잠금 해제될 때까지 이 백업이 삭제되지 않도록 합니다.'}
                         />
                     </div>
                 </Can>
                 <div className={`flex justify-end mb-6`}>
                     <Button role={'switch'} type={'submit'} disabled={isSubmitting}>
-                        Start backup
+                        백업 시작
                     </Button>
                 </div>
             </Form>
@@ -125,7 +124,7 @@ export default () => {
                 className='px-8 py-3 border-[1px] border-[#ffffff12] rounded-full text-sm font-bold shadow-md'
                 onClick={() => setVisible(true)}
             >
-                New Backup
+                새 백업 만들기
             </button>
         </>
     );

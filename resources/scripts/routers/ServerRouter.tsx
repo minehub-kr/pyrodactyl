@@ -219,9 +219,8 @@ export default () => {
                 <>
                     <button
                         id='sidebarToggle'
-                        className={`lg:hidden fixed top-4 z-50 bg-transparent p-2 rounded-md text-white ${
-                            isSidebarVisible ? 'left-[300px]' : 'left-4'
-                        }`}
+                        className={`lg:hidden fixed top-4 z-50 bg-transparent p-2 rounded-md text-white ${isSidebarVisible ? 'left-[300px]' : 'left-4'
+                            }`}
                         onClick={toggleSidebar}
                     >
                         <svg
@@ -304,7 +303,7 @@ export default () => {
                                 end
                             >
                                 <HugeIconsHome fill='currentColor' />
-                                <p>Home</p>
+                                <p>홈</p>
                             </NavLink>
                             {egg_name && !egg_name?.includes(blank_egg_prefix) && (
                                 <>
@@ -315,7 +314,7 @@ export default () => {
                                             to={`/server/${id}/files`}
                                         >
                                             <HugeIconsFolder fill='currentColor' />
-                                            <p>Files</p>
+                                            <p>파일</p>
                                         </NavLink>
                                     </Can>
                                     <Can action={'database.*'} matchAny>
@@ -326,7 +325,7 @@ export default () => {
                                             end
                                         >
                                             <HugeIconsDatabase fill='currentColor' />
-                                            <p>Databases</p>
+                                            <p>데이터베이스</p>
                                         </NavLink>
                                     </Can>
                                     <Can action={'backup.*'} matchAny>
@@ -337,7 +336,7 @@ export default () => {
                                             end
                                         >
                                             <HugeIconsCloudUp fill='currentColor' />
-                                            <p>Backups</p>
+                                            <p>백업</p>
                                         </NavLink>
                                     </Can>
                                     <Can action={'allocation.*'} matchAny>
@@ -348,7 +347,7 @@ export default () => {
                                             end
                                         >
                                             <HugeIconsConnections fill='currentColor' />
-                                            <p>Networking</p>
+                                            <p>네트워크</p>
                                         </NavLink>
                                     </Can>
                                     <Can action={'user.*'} matchAny>
@@ -359,7 +358,7 @@ export default () => {
                                             end
                                         >
                                             <HugeIconsPeople fill='currentColor' />
-                                            <p>Users</p>
+                                            <p>사용자</p>
                                         </NavLink>
                                     </Can>
                                     <Can action={['startup.read', 'startup.update', 'startup.docker-image']} matchAny>
@@ -370,7 +369,7 @@ export default () => {
                                             end
                                         >
                                             <HugeIconsConsole fill='currentColor' />
-                                            <p>Startup</p>
+                                            <p>시작 옵션</p>
                                         </NavLink>
                                     </Can>
                                     <Can action={'schedule.*'} matchAny>
@@ -380,7 +379,7 @@ export default () => {
                                             to={`/server/${id}/schedules`}
                                         >
                                             <HugeIconsClock fill='currentColor' />
-                                            <p>Schedules</p>
+                                            <p>작업 스케쥴러</p>
                                         </NavLink>
                                     </Can>
                                     <Can action={['settings.*', 'file.sftp']} matchAny>
@@ -391,7 +390,7 @@ export default () => {
                                             end
                                         >
                                             <HugeIconsDashboardSettings fill='currentColor' />
-                                            <p>Settings</p>
+                                            <p>설정</p>
                                         </NavLink>
                                     </Can>
                                     <Can action={['activity.*', 'activity.read']} matchAny>
@@ -402,7 +401,7 @@ export default () => {
                                             end
                                         >
                                             <HugeIconsPencil fill='currentColor' />
-                                            <p>Activity</p>
+                                            <p>활동</p>
                                         </NavLink>
                                     </Can>
                                 </>
@@ -415,7 +414,7 @@ export default () => {
                                     end
                                 >
                                     <HugeIconsController fill='currentColor' />
-                                    <p>Software</p>
+                                    <p>소프트웨어</p>
                                 </NavLink>
                             </Can>
                         </ul>
@@ -431,7 +430,7 @@ export default () => {
                             className='relative inset-[1px] w-full h-full overflow-y-auto overflow-x-hidden rounded-md bg-[#08080875]'
                         >
                             {inConflictState &&
-                            (!rootAdmin || (rootAdmin && !location.pathname.endsWith(`/server/${id}`))) ? (
+                                (!rootAdmin || (rootAdmin && !location.pathname.endsWith(`/server/${id}`))) ? (
                                 <ConflictStateRenderer />
                             ) : (
                                 <ErrorBoundary>

@@ -71,7 +71,7 @@ export default () => {
                 }}
                 className='w-full'
             >
-                <MainPageHeader title={showOnlyAdmin ? 'Other Servers' : 'Your Servers'}>
+                <MainPageHeader title={showOnlyAdmin ? '다른 서버' : '내 서버'}>
                     <div className='flex gap-4'>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -88,7 +88,7 @@ export default () => {
                                             fill='white'
                                         />
                                     </svg>
-                                    <div>Filter</div>
+                                    <div>필터</div>
                                     <svg
                                         xmlns='http://www.w3.org/2000/svg'
                                         width='13'
@@ -107,14 +107,14 @@ export default () => {
                                 </button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className='flex flex-col gap-1 z-[99999]' sideOffset={8}>
-                                <div className='text-xs opacity-50 text-center'>More filters coming soon!</div>
+                                <div className='text-xs opacity-50 text-center'>곧 더 많은 필터를 사용할 수 있어요!</div>
                                 {rootAdmin && (
                                     <DropdownMenuItem
                                         onSelect={() => {
                                             setShowOnlyAdmin((s) => !s);
                                         }}
                                     >
-                                        {showOnlyAdmin ? 'Show personal servers' : 'Show other servers'}
+                                        {showOnlyAdmin ? '내 서버 보기' : '다른 서버 보기'}
                                     </DropdownMenuItem>
                                 )}
                             </DropdownMenuContent>
@@ -175,8 +175,8 @@ export default () => {
                                     ) : (
                                         <p className={`text-center text-sm text-zinc-400`}>
                                             {showOnlyAdmin
-                                                ? 'There are no other servers to display.'
-                                                : 'There are no servers associated with your account.'}
+                                                ? '표시할 다른 서버가 없어요.'
+                                                : '내 계정에 연결된 서버가 없어요.'}
                                         </p>
                                     )
                                 }
@@ -207,8 +207,8 @@ export default () => {
                                         ) : (
                                             <p className={`text-center text-sm text-zinc-400`}>
                                                 {showOnlyAdmin
-                                                    ? 'There are no other servers to display.'
-                                                    : 'There are no servers associated with your account.'}
+                                                    ? '표시할 다른 서버가 없어요.'
+                                                    : '내 계정에 연결된 서버가 없어요.'}
                                             </p>
                                         )
                                     }

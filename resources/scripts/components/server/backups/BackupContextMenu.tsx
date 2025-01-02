@@ -103,9 +103,9 @@ export default ({ backup }: Props) => {
                                 b.uuid !== backup.uuid
                                     ? b
                                     : {
-                                          ...b,
-                                          isLocked: !b.isLocked,
-                                      },
+                                        ...b,
+                                        isLocked: !b.isLocked,
+                                    },
                             ),
                         }),
                         false,
@@ -120,21 +120,20 @@ export default ({ backup }: Props) => {
             <Dialog.Confirm
                 open={modal === 'unlock'}
                 onClose={() => setModal('')}
-                title={`Unlock "${backup.name}"`}
+                title={`"${backup.name}" 잠금 해제`}
                 onConfirmed={onLockToggle}
             >
-                This backup will no longer be protected from automated or accidental deletions.
+                이 백업은 더 이상 자동 또는 실수로 삭제되는 것을 방지하지 않습니다.
             </Dialog.Confirm>
             <Dialog.Confirm
                 open={modal === 'restore'}
                 onClose={() => setModal('')}
-                confirm={'Restore'}
-                title={`Restore "${backup.name}"`}
+                confirm={'복원'}
+                title={`"${backup.name}" 복원하기`}
                 onConfirmed={() => doRestorationAction()}
             >
                 <p>
-                    Your server will be stopped. You will not be able to control the power state, access the file
-                    manager, or create additional backups until completed.
+                    서버가 중지됩니다. 완료될 때까지 전원 상태를 제어하거나 파일 관리자에 액세스하거나 추가 백업을 생성할 수 없습니다.
                 </p>
                 <p className={`mt-4 -mb-2 bg-zinc-700 p-3 rounded`}>
                     <label htmlFor={'restore_truncate'} className={`text-base flex items-center cursor-pointer`}>
@@ -145,18 +144,18 @@ export default ({ backup }: Props) => {
                             checked={truncate}
                             onChange={() => setTruncate((s) => !s)}
                         />
-                        Delete all files before restoring backup.
+                        백업을 복원하기 전에 모든 파일을 삭제합니다.
                     </label>
                 </p>
             </Dialog.Confirm>
             <Dialog.Confirm
-                title={`Delete "${backup.name}"`}
-                confirm={'Continue'}
+                title={`"${backup.name}" 지우기`}
+                confirm={'계속'}
                 open={modal === 'delete'}
                 onClose={() => setModal('')}
                 onConfirmed={doDeletion}
             >
-                This is a permanent operation. The backup cannot be recovered once deleted.
+                백업은 삭제되면 되돌릴 수 없어요.
             </Dialog.Confirm>
             <SpinnerOverlay visible={loading} fixed />
             {backup.isSuccessful ? (
@@ -164,13 +163,13 @@ export default ({ backup }: Props) => {
                     <Can action={'backup.download'}>
                         <ContextMenuItem className='flex gap-2' onSelect={doDownload}>
                             <HugeIconsFileDownload className='!h-4 !w-4' fill='currentColor' />
-                            Download Backup
+                            백업 다운로드
                         </ContextMenuItem>
                     </Can>
                     <Can action={'backup.restore'}>
                         <ContextMenuItem className='flex gap-2' onSelect={() => setModal('restore')}>
                             <HugeIconsFileDownload className='!h-4 !w-4' fill='currentColor' />
-                            Restore Backup
+                            백업 복원
                         </ContextMenuItem>
                     </Can>
                     <Can action={'backup.delete'}>
@@ -182,7 +181,7 @@ export default ({ backup }: Props) => {
                             {!backup.isLocked && (
                                 <ContextMenuItem className='flex gap-2' onSelect={() => setModal('delete')}>
                                     <HugeIconsDelete className='!h-4 !w-4' fill='currentColor' />
-                                    Delete Backup
+                                    백업 삭제
                                 </ContextMenuItem>
                             )}
                         </>
@@ -193,7 +192,7 @@ export default ({ backup }: Props) => {
                     onClick={() => setModal('delete')}
                     className={`text-zinc-200 transition-colors duration-150 hover:text-zinc-100 p-2`}
                 >
-                    Delete Backup
+                    백업 삭제
                 </button>
             )}
         </>
