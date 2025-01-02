@@ -83,9 +83,8 @@ export default () => {
         <Fragment key={'dashboard-router'}>
             <button
                 id='sidebarToggle'
-                className={`lg:hidden fixed top-4 left-4 z-50 bg-transparent p-2 rounded-md text-white ${
-                    isSidebarVisible ? 'left-[300px]' : 'left-4'
-                }`}
+                className={`lg:hidden fixed top-4 left-4 z-50 bg-transparent p-2 rounded-md text-white ${isSidebarVisible ? 'left-[300px]' : 'left-4'
+                    }`}
                 onClick={toggleSidebar}
             >
                 <svg
@@ -164,6 +163,7 @@ export default () => {
                         <HugeIconsHome fill='currentColor' />
                         <p>Servers</p>
                     </NavLink>
+                    {/*
                     <NavLink to={'/account/api'} end className='flex flex-row items-center' ref={NavigationApi}>
                         <HugeIconsApi fill='currentColor' />
                         <p>API Keys</p>
@@ -175,6 +175,11 @@ export default () => {
                     <NavLink to={'/account'} end className='flex flex-row items-center' ref={NavigationSettings}>
                         <HugeIconsDashboardSettings fill='currentColor' />
                         <p>Settings</p>
+                    </NavLink>
+                    */}
+                    <NavLink to={'https://dash.minehub.kr'} end className='flex flex-row items-center' ref={NavigationSettings}>
+                        <HugeIconsDashboardSettings fill='currentColor' />
+                        <p>Minehub 대시보드</p>
                     </NavLink>
                 </ul>
             </MainSidebar>
