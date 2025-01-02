@@ -1,6 +1,6 @@
 // million-ignore
 const Logo = () => {
-    return <p className='font-black leading-none text-white text-2xl'>Minehub Cloud</p>;
+    return <div className='flex items-center font-black leading-none text-white text-2xl'>Minehub Cloud</div>;
 };
 
 export default Logo;
