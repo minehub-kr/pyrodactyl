@@ -376,11 +376,10 @@ const SoftwareContainer = () => {
                                             nest.attributes.name.includes(hidden_nest_prefix) ? null : (
                                                 <div
                                                     key={nest.attributes.uuid}
-                                                    className={`cursor-pointer bg-[#3333332a] border-[1px] p-4 rounded-lg w-full text-left ${
-                                                        selectedNest?.attributes.uuid === nest.attributes.uuid
-                                                            ? 'border-[#555555ef]'
-                                                            : 'border-[#55555540]'
-                                                    }`}
+                                                    className={`cursor-pointer bg-[#3333332a] border-[1px] p-4 rounded-lg w-full text-left ${selectedNest?.attributes.uuid === nest.attributes.uuid
+                                                        ? 'border-[#555555ef]'
+                                                        : 'border-[#55555540]'
+                                                        }`}
                                                 >
                                                     <div className='flex items-center justify-between'>
                                                         <p className='text-neutral-200 text-md'>
@@ -404,11 +403,10 @@ const SoftwareContainer = () => {
                                         {selectedNest.attributes.relationships.eggs.data.map((egg, eggIndex) => (
                                             <div
                                                 key={egg.attributes.uuid}
-                                                className={`cursor-pointer border p-4 rounded-lg bg-[#3333332a] w-full ${
-                                                    selectedEgg?.attributes.uuid === egg.attributes.uuid
-                                                        ? 'border-[#555555ef]'
-                                                        : 'border-[#55555540]'
-                                                }`}
+                                                className={`cursor-pointer border p-4 rounded-lg bg-[#3333332a] w-full ${selectedEgg?.attributes.uuid === egg.attributes.uuid
+                                                    ? 'border-[#555555ef]'
+                                                    : 'border-[#55555540]'
+                                                    }`}
                                             >
                                                 <div className='flex items-center justify-between'>
                                                     <p className='text-neutral-300 text-md'>{egg.attributes.name}</p>

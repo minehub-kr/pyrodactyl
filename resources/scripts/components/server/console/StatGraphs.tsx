@@ -105,7 +105,7 @@ export default () => {
                 }}
             >
                 <ChartBlock
-                    title={'Network Activity'}
+                    title={'네트워크 활동'}
                     legend={
                         <div className='flex gap-2'>
                             <Tooltip.Root delayDuration={200}>

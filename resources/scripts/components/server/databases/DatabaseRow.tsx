@@ -43,14 +43,13 @@ export default ({ database }: Props) => {
     const appendDatabase = ServerContext.useStoreActions((actions) => actions.databases.appendDatabase);
     const removeDatabase = ServerContext.useStoreActions((actions) => actions.databases.removeDatabase);
 
-    const jdbcConnectionString = `jdbc:mysql://${database.username}${
-        database.password ? `:${encodeURIComponent(database.password)}` : ''
-    }@${database.connectionString}/${database.name}`;
+    const jdbcConnectionString = `jdbc:mysql://${database.username}${database.password ? `:${encodeURIComponent(database.password)}` : ''
+        }@${database.connectionString}/${database.name}`;
 
     const schema = object().shape({
         confirm: string()
-            .required('The database name must be provided.')
-            .oneOf([database.name.split('_', 2)[1] || '', database.name], 'The database name must be provided.'),
+            .required('데이터베이스 이름을 입력해야 합니다.')
+            .oneOf([database.name.split('_', 2)[1] || '', database.name], '데이터베이스 이름이 일치하지 않습니다.'),
     });
 
     const submit = (_: { confirm: string }, { setSubmitting }: FormikHelpers<{ confirm: string }>) => {
@@ -79,24 +78,23 @@ export default ({ database }: Props) => {
                             setVisible(false);
                             resetForm();
                         }}
-                        title='Confirm database deletion'
+                        title='데이터베이스 삭제 확인'
                     >
                         <FlashMessageRender byKey={'database:delete'} />
                         <div className='flex flex-col'>
                             <p>
-                                Deleting a database is a permanent action, it cannot be undone. This will permanently
-                                delete the <strong>{database.name}</strong> database and remove all its data.
+                                데이터베이스를 삭제하는 것은 영구적인 작업이며, 되돌릴 수 없습니다. 이 작업은 <strong>{database.name}</strong> 데이터베이스를 영구적으로 삭제하고 모든 데이터를 제거합니다.
                             </p>
                             <Form className='mt-6'>
                                 <Field
                                     type={'text'}
                                     id={'confirm_name'}
                                     name={'confirm'}
-                                    label={'Confirm Database Name'}
-                                    description={'Enter the database name to confirm deletion.'}
+                                    label={'데이터베이스 이름 확인'}
+                                    description={'삭제를 확인하려면 데이터베이스 이름을 입력하세요.'}
                                 />
                                 <Button type={'submit'} color={'red'} className='min-w-full my-6' disabled={!isValid}>
-                                    Delete Database
+                                    데이터베이스 삭제
                                 </Button>
                             </Form>
                         </div>
@@ -106,7 +104,7 @@ export default ({ database }: Props) => {
 
             <Modal
                 visible={connectionVisible}
-                title='Database connection details'
+                title='데이터베이스 연결 정보'
                 closeButton={true}
                 onDismissed={() => setConnectionVisible(false)}
             >

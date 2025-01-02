@@ -88,13 +88,12 @@ const JavaVersionModalFeature = () => {
             onDismissed={() => setVisible(false)}
             closeOnBackground={false}
             showSpinnerOverlay={loading}
-            title='Unsupported Java Version'
+            title='지원되지 않는 Java 버전'
         >
             <div className='flex flex-col gap-4 w-full h-full'>
                 {/*<FlashMessageRender key={'feature:javaVersion'} />*/}
                 <p>
-                    This server is currently running an unsupported version of Java and cannot be started. Please select
-                    a supported version from the list below to continue starting the server.
+                    이 서버는 지원되지 않는 자바를 사용하고 있기 때문에 시작할 수 없어요. 지원되는 버전을 아래에서 선택하고 서버를 시작해주세요.
                 </p>
                 <div className={`mt-6 flex flex-row justify-end items-center gap-3 my-4`}>
                     <Can action={'startup.docker-image'}>
@@ -110,7 +109,7 @@ const JavaVersionModalFeature = () => {
                                         .pop()
                                         ?.split('_')
                                         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                                        .join(' ') || 'Select a version'}
+                                        .join(' ') || '버전 선택'}
                                     {dropDownOpen ? (
                                         <HugeIconsArrowUp fill={'currentColor'} className={`ml-2 w-[16px] h-[16px]`} />
                                     ) : (
@@ -138,7 +137,7 @@ const JavaVersionModalFeature = () => {
                     </Button> */}
                     <Can action={'startup.docker-image'}>
                         <Button onClick={updateJava} className={`w-full sm:w-auto`}>
-                            Update
+                            업데이트
                         </Button>
                     </Can>
                 </div>

@@ -1,20 +1,17 @@
 name: Docker Build and Push
 on:
-    workflow_run:
-        workflows: ['Release']
-        types:
-            - completed
-    push:
-        branches:
-            - release/**
-            - feature/**
-            - dev
-        tags:
-            - v/*
-            - v*
-    release:
-        types:
-            - published
+  push:
+    branches:
+      - main
+      - dev
+      - minehub
+  pull_request:
+    branches:
+      - main
+  release:
+    types:
+      - published
+
 permissions:
     packages: write
 
@@ -28,12 +25,11 @@ jobs:
               with:
                   ref: ${{ github.event.release.tag_name || github.event.workflow_run.head_branch || github.ref }}
                   fetch-depth: 1 # Only fetch the latest commit to speed up checkout
-
             - name: Docker metadata
               id: docker_meta
               uses: docker/metadata-action@v5
               with:
-                  images: ghcr.io/pyrohost/pyrodactyl
+                  images: ghcr.io/minehub-kr/pyrodactyl
                   flavor: latest=auto
                   tags: |
                       type=raw,value=main,enable=${{ github.ref == 'refs/heads/main' }}
@@ -48,7 +44,7 @@ jobs:
 
             # Only set up QEMU for release branches and tagged releases
             - name: Setup QEMU
-              if: ${{ startsWith(github.ref, 'refs/heads/release/') || github.event_name == 'release' || github.ref == 'refs/heads/main' }}
+              if: ${{ startsWith(github.ref, 'refs/heads/release/') || github.event_name == 'release' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/minehub' }}
               uses: docker/setup-qemu-action@v3
 
             - name: Setup Docker buildx
@@ -72,7 +68,7 @@ jobs:
 
             # For feature branches, only build for amd64 to save time
             - name: Build and Push (feature branches)
-              if: ${{ startsWith(github.ref, 'refs/heads/feature/') || github.ref == 'refs/heads/dev' }}
+              if: ${{ startsWith(github.ref, 'refs/heads/feature/') || github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/minehub' }}
               uses: docker/build-push-action@v6
               with:
                   context: .

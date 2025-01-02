@@ -26,14 +26,14 @@ export const StatusPill = () => {
             ></div>
             <div className='text-sm font-bold'>
                 {status === 'offline'
-                    ? 'Offline'
+                    ? '오프라인'
                     : status === 'running'
-                      ? 'Online'
-                      : status === 'stopping'
-                        ? 'Stopping'
-                        : status === 'starting'
-                          ? 'Starting'
-                          : 'Fetching'}
+                        ? '온라인'
+                        : status === 'stopping'
+                            ? '정지하는 중'
+                            : status === 'starting'
+                                ? '시작하는 중'
+                                : '정보를 불러오는 중'}
             </div>
         </div>
     );

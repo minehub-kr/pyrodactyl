@@ -12,7 +12,7 @@ export default createGlobalStyle`
         overflow: hidden;
         --tw-bg-opacity: 1;
         background-color: rgb(0 0 0 / var(--tw-bg-opacity));
-        font-family: "Plus Jakarta Sans", sans-serif;
+        font-family: "Pretendard Variable", sans-serif;
         --tw-text-opacity: 1;
         color: rgb(255 255 255 / var(--tw-text-opacity));
     }

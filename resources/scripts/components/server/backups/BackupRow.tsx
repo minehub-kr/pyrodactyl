@@ -37,12 +37,12 @@ export default ({ backup }: Props) => {
                         b.uuid !== backup.uuid
                             ? b
                             : {
-                                  ...b,
-                                  isSuccessful: parsed.is_successful || true,
-                                  checksum: (parsed.checksum_type || '') + ':' + (parsed.checksum || ''),
-                                  bytes: parsed.file_size || 0,
-                                  completedAt: new Date(),
-                              },
+                                ...b,
+                                isSuccessful: parsed.is_successful || true,
+                                checksum: (parsed.checksum_type || '') + ':' + (parsed.checksum || ''),
+                                bytes: parsed.file_size || 0,
+                                completedAt: new Date(),
+                            },
                     ),
                 }),
                 false,
@@ -74,7 +74,7 @@ export default ({ backup }: Props) => {
                                             <span
                                                 className={`bg-red-500 py-px px-2 rounded-full text-white text-xs uppercase border border-red-600 mr-2`}
                                             >
-                                                Failed
+                                                실패
                                             </span>
                                         )}
                                         <div className={`flex gap-2 items-center justify-center`}>

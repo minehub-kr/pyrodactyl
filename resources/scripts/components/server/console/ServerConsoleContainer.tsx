@@ -29,15 +29,15 @@ const ServerConsoleContainer = () => {
     const isNodeUnderMaintenance = ServerContext.useStoreState((state) => state.server.data!.isNodeUnderMaintenance);
 
     return (
-        <ServerContentBlock title={'Home'}>
+        <ServerContentBlock title={'홈'}>
             <div className='w-full h-full min-h-full flex-1 flex flex-col gap-4'>
                 {(isNodeUnderMaintenance || isInstalling || isTransferring) && (
                     <Alert type={'warning'} className={'mb-4'}>
                         {isNodeUnderMaintenance
-                            ? 'The node of this server is currently under maintenance and all actions are unavailable.'
+                            ? '이 서버의 노드는 현재 점검 중이에요. 잠시 후 다시 방문해주세요.'
                             : isInstalling
-                              ? 'This server is currently running its installation process and most actions are unavailable.'
-                              : 'This server is currently being transferred to another node and all actions are unavailable.'}
+                                ? '이 서버는 현재 설치 중이에요. 잠시 후 다시 방문해주세요.'
+                                : '이 서버는 현재 다른 노드로 전송하고 있어요. 잠시 후 다시 방문해주세요.'}
                     </Alert>
                 )}
                 <MainPageHeader title={name} titleChildren={<StatusPill />}>

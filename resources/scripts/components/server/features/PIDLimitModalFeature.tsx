@@ -55,31 +55,28 @@ const PIDLimitModalFeature = () => {
             dismissable={false}
             closeOnBackground={false}
             closeButton={true}
-            title={isAdmin ? 'Memory or process limit reached' : 'Possible resource limit reached'}
+            title={isAdmin ? '메모리 또는 프로세스 한도 초과' : '자원 한도 초과 가능성'}
         >
             <FlashMessageRender key={'feature:pidLimit'} />
             <div className={`flex-col`}>
                 {isAdmin ? (
                     <>
                         <p>
-                            This server has reached the maximum process, thread, or memory limit. Increasing{' '}
-                            <code className={`font-mono bg-zinc-900`}>container_pid_limit</code> in the Wings
-                            configuration, <code className={`font-mono bg-zinc-900`}>config.yml</code>, might help
-                            resolve this issue.
+                            이 서버는 최대 프로세스, 스레드 또는 메모리 한도에 도달했습니다. Wings 구성의{' '}
+                            <code className={`font-mono bg-zinc-900`}>container_pid_limit</code> 값을 증가시키면 이 문제를 해결하는 데 도움이 될 수 있습니다.
                         </p>
                         <p className='mt-3'>
-                            <b>Note: Wings must be restarted for the configuration file changes to take effect</b>
+                            <b>참고: 구성 파일 변경 사항을 적용하려면 Wings를 재시작해야 합니다</b>
                         </p>
                     </>
                 ) : (
                     <>
                         <p>
-                            This server is attempting to use more resources than allocated. Please contact the
-                            administrator and give them the error below.
+                            이 서버는 할당된 자원보다 더 많은 자원을 사용하려고 합니다. 관리자에게 문의하고 아래 오류를 전달하세요.
                         </p>
                         <p className='mt-3'>
                             <code className={`font-mono bg-zinc-900`}>
-                                pthread_create failed, Possibly out of memory or process/resource limits reached
+                                pthread_create failed, 메모리 부족 또는 프로세스/자원 한도 초과 가능성
                             </code>
                         </p>
                     </>

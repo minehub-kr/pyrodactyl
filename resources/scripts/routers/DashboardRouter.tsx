@@ -204,7 +204,8 @@ export default () => {
             )}
             <button
                 id='sidebarToggle'
-                className='lg:hidden fixed flex items-center justify-center top-4 left-4 z-50 bg-[#1a1a1a] p-3 rounded-md text-white shadow-md cursor-pointer'
+                className={`lg:hidden fixed top-4 left-4 z-50 bg-transparent p-2 rounded-md text-white ${isSidebarVisible ? 'left-[300px]' : 'left-4'
+                    }`}
                 onClick={toggleSidebar}
                 aria-label='Toggle sidebar'
             >
@@ -276,8 +277,9 @@ export default () => {
                 <ul data-pyro-subnav-routes-wrapper='' className='pyro-subnav-routes-wrapper ' onClick={toggleSidebar}>
                     <NavLink to={'/'} end className='flex flex-row items-center' ref={NavigationHome}>
                         <HugeIconsHome fill='currentColor' />
-                        <p>Servers</p>
+                        <p>내 서버</p>
                     </NavLink>
+                    {/*
                     <NavLink to={'/account/api'} end className='flex flex-row items-center' ref={NavigationApi}>
                         <HugeIconsApi fill='currentColor' />
                         <p>API Keys</p>
@@ -289,6 +291,11 @@ export default () => {
                     <NavLink to={'/account'} end className='flex flex-row items-center' ref={NavigationSettings}>
                         <HugeIconsDashboardSettings fill='currentColor' />
                         <p>Settings</p>
+                    </NavLink>
+                    */}
+                    <NavLink to={'https://dash.minehub.kr'} end className='flex flex-row items-center' ref={NavigationSettings}>
+                        <HugeIconsDashboardSettings fill='currentColor' />
+                        <p>Minehub 대시보드</p>
                     </NavLink>
                 </ul>
             </MainSidebar>

@@ -20,12 +20,12 @@ interface Values {
 
 const RenameServerBox = () => {
     return (
-        <TitledGreyBox title={'Server Details'}>
+        <TitledGreyBox title={'서버 세부 정보'}>
             <Form className='flex flex-col gap-4'>
-                <Field id={'name'} name={'name'} label={'Server Name'} type={'text'} />
-                <Field id={'description'} name={'description'} label={'Server Description'} type={'text'} />
+                <Field id={'name'} name={'name'} label={'서버 이름'} type={'text'} />
+                <Field id={'description'} name={'description'} label={'서버 설명'} type={'text'} />
                 <div className={`mt-6 text-right`}>
-                    <Button type={'submit'}>Save</Button>
+                    <Button type={'submit'}>저장</Button>
                 </div>
             </Form>
         </TitledGreyBox>
@@ -39,14 +39,14 @@ export default () => {
 
     const submit = ({ name, description }: Values) => {
         clearFlashes('settings');
-        toast('Updating server details...');
+        toast('서버 세부 정보를 업데이트하는 중...');
         renameServer(server.uuid, name, description)
             .then(() => setServer({ ...server, name, description }))
             .catch((error) => {
                 console.error(error);
                 addError({ key: 'settings', message: httpErrorToHuman(error) });
             })
-            .then(() => toast.success('Server details updated!'));
+            .then(() => toast.success('서버 세부 정보가 업데이트되었습니다!'));
     };
 
     return (
