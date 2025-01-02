@@ -9,7 +9,7 @@ class Username implements Rule
     /**
      * Regex to use when validating usernames.
      */
-    public const VALIDATION_REGEX = '/^[a-z0-9]([\w\.-]+)[a-z0-9]$/';
+    public const VALIDATION_REGEX = '/^.{1,}$/';
 
     /**
      * Validate that a username contains only the allowed characters and starts/ends
