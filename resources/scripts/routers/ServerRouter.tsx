@@ -369,7 +369,7 @@ export default () => {
                                             end
                                         >
                                             <HugeIconsConsole fill='currentColor' />
-                                            <p>시작 옵션</p>
+                                            <p>시작 설정</p>
                                         </NavLink>
                                     </Can>
                                     <Can action={'schedule.*'} matchAny>

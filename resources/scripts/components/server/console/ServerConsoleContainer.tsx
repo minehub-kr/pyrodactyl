@@ -29,7 +29,7 @@ const ServerConsoleContainer = () => {
     const isNodeUnderMaintenance = ServerContext.useStoreState((state) => state.server.data!.isNodeUnderMaintenance);
 
     return (
-        <ServerContentBlock title={'Home'}>
+        <ServerContentBlock title={'홈'}>
             <div className='w-full h-full min-h-full flex-1 flex flex-col gap-4'>
                 {(isNodeUnderMaintenance || isInstalling || isTransferring) && (
                     <Alert type={'warning'} className={'mb-4'}>
