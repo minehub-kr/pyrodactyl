@@ -12,7 +12,7 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                jakarta: ['"Plus Jakarta Sans"', 'sans-serif'],
+                jakarta: ['"Pretendard Variable"', 'sans-serif'],
             },
             colors: {
                 ...colors,
