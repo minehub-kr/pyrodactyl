@@ -37,7 +37,11 @@ const LoginContainer = () => {
 
         setMessage('스텔라 IT으로 로그인을 진행하고 있습니다. 잠시만 기다려주세요.');
 
-        code ? onLogin() : onRedirect();
+        if (code) {
+            onLogin();
+        } else {
+            onRedirect();
+        }
     }, [code, logout]);
 
     return (
