@@ -1,5 +1,7 @@
+import { ChevronDown, ChevronUp } from '@gravity-ui/icons';
 import { useEffect, useState } from 'react';
 
+import ActionButton from '@/components/elements/ActionButton';
 // import { Options } from '@/components/elements/button/types';
 import Can from '@/components/elements/Can';
 import {
@@ -11,9 +13,6 @@ import {
 } from '@/components/elements/DropdownMenu';
 import Modal from '@/components/elements/Modal';
 import Spinner from '@/components/elements/Spinner';
-import { Button } from '@/components/elements/button/index';
-import HugeIconsArrowDown from '@/components/elements/hugeicons/ArrowDown';
-import HugeIconsArrowUp from '@/components/elements/hugeicons/ArrowUp';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 
 import setSelectedDockerImage from '@/api/server/setSelectedDockerImage';
@@ -111,12 +110,9 @@ const JavaVersionModalFeature = () => {
                                         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                                         .join(' ') || '버전 선택'}
                                     {dropDownOpen ? (
-                                        <HugeIconsArrowUp fill={'currentColor'} className={`ml-2 w-[16px] h-[16px]`} />
+                                        <ChevronUp fill={'currentColor'} className={`ml-2 w-[16px] h-[16px]`} />
                                     ) : (
-                                        <HugeIconsArrowDown
-                                            fill={'currentColor'}
-                                            className={`ml-2 w-[16px] h-[16px]`}
-                                        />
+                                        <ChevronDown fill={'currentColor'} className={`ml-2 w-[16px] h-[16px]`} />
                                     )}
                                 </button>
                             </DropdownMenuTrigger>
@@ -136,9 +132,9 @@ const JavaVersionModalFeature = () => {
                         Cancel
                     </Button> */}
                     <Can action={'startup.docker-image'}>
-                        <Button onClick={updateJava} className={`w-full sm:w-auto`}>
-                            업데이트
-                        </Button>
+                        <ActionButton variant='primary' onClick={updateJava} className={`w-full sm:w-auto`}>
+                            Update
+                        </ActionButton>
                     </Can>
                 </div>
             </div>

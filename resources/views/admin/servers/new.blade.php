@@ -112,23 +112,31 @@
                     <div class="form-group col-xs-6">
                         <label for="pDatabaseLimit" class="control-label">Database Limit</label>
                         <div>
-                            <input type="text" id="pDatabaseLimit" name="database_limit" class="form-control" value="{{ old('database_limit', 0) }}"/>
+                            <input type="text" id="pDatabaseLimit" name="database_limit" class="form-control" value="{{ old('database_limit') }}" placeholder="Leave blank for unlimited"/>
                         </div>
-                        <p class="text-muted small">The total number of databases a user is allowed to create for this server.</p>
+                        <p class="text-muted small">The total number of databases a user is allowed to create for this server. Leave blank for unlimited, set to 0 to disable.</p>
                     </div>
                     <div class="form-group col-xs-6">
                         <label for="pAllocationLimit" class="control-label">Allocation Limit</label>
                         <div>
-                            <input type="text" id="pAllocationLimit" name="allocation_limit" class="form-control" value="{{ old('allocation_limit', 0) }}"/>
+                            <input type="text" id="pAllocationLimit" name="allocation_limit" class="form-control" value="{{ old('allocation_limit') }}" placeholder="Leave blank for unlimited"/>
                         </div>
-                        <p class="text-muted small">The total number of allocations a user is allowed to create for this server.</p>
+                        <p class="text-muted small">The total number of allocations a user is allowed to create for this server. Leave blank for unlimited, set to 0 to disable.</p>
                     </div>
                     <div class="form-group col-xs-6">
                         <label for="pBackupLimit" class="control-label">Backup Limit</label>
                         <div>
-                            <input type="text" id="pBackupLimit" name="backup_limit" class="form-control" value="{{ old('backup_limit', 0) }}"/>
+                            <input type="text" id="pBackupLimit" name="backup_limit" class="form-control" value="{{ old('backup_limit') }}" placeholder="Leave blank for unlimited"/>
                         </div>
-                        <p class="text-muted small">The total number of backups that can be created for this server.</p>
+                        <p class="text-muted small">The total number of backups that can be created for this server. Leave blank for unlimited, set to 0 to disable.</p>
+                    </div>
+                    <div class="form-group col-xs-6">
+                        <label for="pBackupStorageLimit" class="control-label">Backup Storage Limit</label>
+                        <div class="input-group">
+                            <input type="text" id="pBackupStorageLimit" name="backup_storage_limit" data-multiplicator="true" class="form-control" value="{{ old('backup_storage_limit') }}" placeholder="Leave blank for unlimited"/>
+                            <span class="input-group-addon">MiB</span>
+                        </div>
+                        <p class="text-muted small">The total storage space that can be used for backups. Leave blank for unlimited storage.</p>
                     </div>
                 </div>
             </div>
@@ -177,6 +185,19 @@
                     </div>
 
                     <div class="form-group col-xs-6">
+                        <label for="pOverheadMemory">Overhead Memory</label>
+
+                        <div class="input-group">
+                            <input type="text" id="pOverheadMemory" name="overhead_memory" class="form-control" value="{{ old('overhead_memory', 0) }}" />
+                            <span class="input-group-addon">MiB</span>
+                        </div>
+
+                        <p class="text-muted small">Additional memory allocated to the container that doesn't go to the SERVER_MEMORY variable. Setting to <code>0</code> disables overhead memory.</p>
+                    </div>
+                </div>
+
+                <div class="box-body row">
+                    <div class="form-group col-xs-6">
                         <label for="pSwap">Swap</label>
 
                         <div class="input-group">
@@ -216,6 +237,14 @@
                         </div>
 
                         <p class="small text-muted no-margin">Terminates the server if it breaches the memory limits. Enabling OOM killer may cause server processes to exit unexpectedly.</p>
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <div class="checkbox checkbox-primary no-margin-bottom">
+                            <input type="checkbox" id="pExcludeFromResourceCalculation" name="exclude_from_resource_calculation" value="1" {{ \Pterodactyl\Helpers\Utilities::checked('exclude_from_resource_calculation', 0) }} />
+                            <label for="pExcludeFromResourceCalculation" class="strong">Exclude from Resource Calculation</label>
+                        </div>
+
+                        <p class="small text-muted no-margin">When enabled, this server will not be included in resource calculations when provisioning new servers onto this node. Useful for testing or development servers.</p>
                     </div>
                 </div>
             </div>
@@ -392,4 +421,6 @@
             // END Persist 'Nest' select2
         });
     </script>
+
+
 @endsection

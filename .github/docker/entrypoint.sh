@@ -4,51 +4,74 @@ cd /app
 mkdir -p /var/log/panel/logs/ /var/log/supervisord/ /var/log/nginx/ /var/log/php7/ \
   && chmod 777 /var/log/panel/logs/ \
   && ln -s /app/storage/logs/ /var/log/panel/
+# Ensure proper permissions for Laravel storage directories
+mkdir -p /app/storage/logs /app/storage/framework/cache /app/storage/framework/sessions /app/storage/framework/views \
+  && chmod -R 777 /app/storage/ \
 
-# Check that user has mounted the /app/var directory
-if [ ! -d /app/var ]; then
-  echo "You must mount the /app/var directory to the container."
-  exit 1
+chmod g+s /app/storage/logs/
+chown nginx:nginx /app/storage/logs/
+
+# Check if any variables are unset and must be generated
+if [ -z "$APP_KEY" ] || [ -z "$HASHIDS_LENGTH" ] || [ -z "$HASHIDS_SALT" ]; then
+  # Check that user has mounted the /app/var directory
+  if [ ! -d /app/var ]; then
+    echo "You must mount the /app/var directory to the container."
+    exit 1
+  fi
+  
+  # Check the .env file exists and make a blank one if needed
+  if [ ! -f /app/var/.env ]; then
+    echo "Creating .env file."
+    touch /app/var/.env
+  fi
+  
+  # Replace .env in container with our external .env file
+  rm -f /app/.env
+  ln -s /app/var/.env /app/
+  
+  # Use a subshell to avoid polluting the global environment
+  (
+      # Load in any existing environment variables in the .env file
+      source /app/.env
+  
+      # Check if APP_KEY is set
+      if [ -z "$APP_KEY" ]; then
+          echo "Generating APP_KEY"
+          echo "APP_KEY=" >> /app/.env
+          APP_ENVIRONMENT_ONLY=true php artisan key:generate
+      fi
+  
+      # Check if HASHIDS_LENGTH is set
+      if [ -z "$HASHIDS_LENGTH" ]; then
+          echo "Defaulting HASHIDS_LENGTH to 8"
+          echo "HASHIDS_LENGTH=8" >> /app/.env
+      fi
+  
+  
+      # Check if HASHID_SALT is set
+      if [ -z "$HASHIDS_SALT" ]; then
+          echo "Generating HASHIDS_SALT"
+          HASHIDS_SALT=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 20 | head -n 1)
+          echo "HASHIDS_SALT=$HASHIDS_SALT" >> /app/.env
+      fi
+  )
 fi
 
-# Check the .env file exists and make a blank one if needed
-if [ ! -f /app/var/.env ]; then
-  echo "Creating .env file."
-  touch /app/var/.env
+if [ -f /etc/nginx/http.d/panel.conf ]; then
+  nginx -t
+  if [[ $? -ne 0 ]]; then
+    echo "nginx config test failed, regenerating"
+    rm /etc/nginx/http.d/panel.conf
+  fi
+
+  if [[ $LE_EMAIL ]]; then
+    grep "server_name $APP_URL" /etc/nginx/http.d/panel.conf
+    if [[ $? -ne 0 ]]; then
+      echo "APP_URL not found in nginx config, regenerating"
+      rm /etc/nginx/http.d/panel.conf
+    fi
+  fi
 fi
-
-# Replace .env in container with our external .env file
-rm -f /app/.env
-ln -s /app/var/.env /app/
-
-
-# Use a subshell to avoid polluting the global environment
-(
-    # Load in any existing environment variables in the .env file
-    source /app/.env
-
-    # Check if APP_KEY is set
-    if [ -z "$APP_KEY" ]; then
-        echo "Generating APP_KEY"
-        echo "APP_KEY=" >> /app/.env
-        APP_ENVIRONMENT_ONLY=true php artisan key:generate
-    fi
-
-    # Check if HASHIDS_LENGTH is set
-    if [ -z "$HASHIDS_LENGTH" ]; then
-        echo "Defaulting HASHIDS_LENGTH to 8"
-        echo "HASHIDS_LENGTH=8" >> /app/.env
-    fi
-
-
-    # Check if HASHID_SALT is set
-    if [ -z "$HASHIDS_SALT" ]; then
-        echo "Generating HASHIDS_SALT"
-        HASHIDS_SALT=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 20 | head -n 1)
-        echo "HASHIDS_SALT=$HASHIDS_SALT" >> /app/.env
-    fi
-)
-
 
 echo "Checking if https is required."
 if [ -f /etc/nginx/http.d/panel.conf ]; then
@@ -104,47 +127,65 @@ fi
 # Setup development environment if specified
 (
   source /app/.env
+
   if [ "$PYRODACTYL_DOCKER_DEV" = "true" ] && [ "$DEV_SETUP" != "true" ]; then
     echo -e "\e[42mDevelopment environment detected, setting up development resources...\e[0m"
+    export POSTGRES_PASSWORD=$(grep "POSTGRES_PASSWORD" docker-compose.yml | awk '{print $2}')
+    export POSTGRES_USER=$(grep "POSTGRES_USER" docker-compose.yml | awk '{print $2}')
 
+    php artisan p:user:make -n --email dev@pyro.host --username dev --name-first Developer --name-last User --password dev
     # Create a developer user
-    php artisan p:user:make -n --email dev@pyro.host --username dev --name-first Developer --name-last User --password password
-    mariadb -u root -h database -p"$DB_ROOT_PASSWORD" --ssl=0 -e "USE panel; UPDATE users SET root_admin = 1;" # workaround because --admin is broken
-    
+    if [ "$DB_CONNECTION" = "mysql" ] || [ "$DB_CONNECTION" = "mariadb" ]; then
+        mariadb -u root -h database -p"$DB_ROOT_PASSWORD" --ssl=0 -e "USE panel; UPDATE users SET root_admin = 1;"
+    fi
+    if [ "$DB_CONNECTION" = "pgsql" ]; then
+        PGPASSWORD=$POSTGRES_PASSWORD psql -U$POSTGRES_USER  -dpanel -hpostgres -c"UPDATE users SET root_admin = 1;"
+    fi
     # Make a location and node for the panel
     php artisan p:location:make -n --short local --long Local
-    php artisan p:node:make -n --name local --description "Development Node" --locationId 1 --fqdn localhost --internal-fqdn $WINGS_INTERNAL_IP --public 1 --scheme http --proxy 0 --maxMemory 1024 --maxDisk 10240 --overallocateMemory 0 --overallocateDisk 0
-    
+    php artisan p:node:make -n --name local --description "Development Node" --locationId 1 --fqdn localhost --internal-fqdn $ELYTRA_INTERNAL_IP --public 1 --scheme http --proxy 0 --maxMemory 1024 --maxDisk 10240 --overallocateMemory 0 --overallocateDisk 0 --daemonType elytra
+
     echo "Adding dummy allocations..."
-    mariadb -u root -h database -p"$DB_ROOT_PASSWORD" --ssl=0 -e "USE panel; INSERT INTO allocations (node_id, ip, port) VALUES (1, '0.0.0.0', 25565), (1, '0.0.0.0', 25566), (1, '0.0.0.0', 25567);"
-    
+    if [ "$DB_CONNECTION" = "mysql" ] || [ "$DB_CONNECTION" = "mariadb" ]; then
+        mariadb -u root -h database -p"$DB_ROOT_PASSWORD" --ssl=0 -e "USE panel; INSERT INTO allocations (node_id, ip, port) VALUES (1, '0.0.0.0', 25565), (1, '0.0.0.0', 25566), (1, '0.0.0.0', 25567);"
+    fi
+    if [ "$DB_CONNECTION" = "pgsql" ]; then
+        PGPASSWORD=$POSTGRES_PASSWORD psql -U$POSTGRES_USER  -dpanel -hpostgres -c"INSERT INTO allocations (node_id, ip, port) VALUES (1, '0.0.0.0', 25565), (1, '0.0.0.0', 25566), (1, '0.0.0.0', 25567);"
+
+    fi
+
     echo "Creating database user..."
-    mariadb -u root -h database -p"$DB_ROOT_PASSWORD" --ssl=0 -e "CREATE USER 'pterodactyluser'@'%' IDENTIFIED BY 'somepassword'; GRANT ALL PRIVILEGES ON *.* TO 'pterodactyluser'@'%' WITH GRANT OPTION;"
+    if [ "$DB_CONNECTION" = "mysql" ] || [ "$DB_CONNECTION" = "mariadb" ]; then
+        mariadb -u root -h database -p"$DB_ROOT_PASSWORD" --ssl=0 -e "CREATE USER 'pterodactyluser'@'%' IDENTIFIED BY 'somepassword'; GRANT ALL PRIVILEGES ON *.* TO 'pterodactyluser'@'%' WITH GRANT OPTION;"
+    fi
+    if [ "$DB_CONNECTION" = "pgsql" ]; then
+        PGPASSWORD=$POSTGRES_PASSWORD psql -U$POSTGRES_USER  -dpanel -hpostgres -c"CREATE USER pterodactyluser WITH PASSWORD 'somepassword' SUPERUSER;"
+    fi
 
     # Configure node
-    export WINGS_CONFIG=/etc/pterodactyl/config.yml
-    mkdir -p $(dirname $WINGS_CONFIG)
-    echo "Fetching and modifying Wings configuration file..."
+    export ELYTRA_CONFIG=/etc/pterodactyl/config.yml
+    mkdir -p $(dirname $ELYTRA_CONFIG)
+    echo "Fetching and modifying Elytra configuration file..."
     CONFIG=$(php artisan p:node:configuration 1)
-    
+
     # Allow all origins for CORS
     CONFIG=$(printf "%s\nallowed_origins: ['*']" "$CONFIG")
-    
-    # Update Wings configuration paths if WINGS_DIR is set
-    if [ -z "$WINGS_DIR" ]; then
-      echo "WINGS_DIR is not set, using default paths."
+
+    # Update Elytra configuration paths if ELYTRA_DIR is set
+    if [ -z "$ELYTRA_DIR" ]; then
+      echo "ELYTRA_DIR is not set, using default paths."
     else
-      echo "Updating Wings configuration paths to '$WINGS_DIR'..."
-      
+      echo "Updating ELYTRA configuration paths to '$ELYTRA_DIR'..."
+
       # add system section if it doesn't exist
       if ! echo "$CONFIG" | grep -q "^system:"; then
         CONFIG=$(printf "%s\nsystem:" "$CONFIG")
       fi
-      
+
       update_config() {
         local key="$1"
         local value="$2"
-        
+
         # update existing key or add new one
         if echo "$CONFIG" | grep -q "^  $key:"; then
           CONFIG=$(echo "$CONFIG" | sed "s|^  $key:.*|  $key: $value|")
@@ -152,17 +193,17 @@ fi
           CONFIG=$(echo "$CONFIG" | sed "/^system:/a\\  $key: $value")
         fi
       }
-      
-      update_config "root_directory" "$WINGS_DIR/srv/wings/"
-      update_config "log_directory" "$WINGS_DIR/srv/wings/logs/"
-      update_config "data" "$WINGS_DIR/srv/wings/volumes"
-      update_config "archive_directory" "$WINGS_DIR/srv/wings/archives"
-      update_config "backup_directory" "$WINGS_DIR/srv/wings/backups"
-      update_config "tmp_directory" "$WINGS_DIR/srv/wings/tmp/"
+
+      update_config "root_directory" "$ELYTRA_DIR/srv/elytra/"
+      update_config "log_directory" "$ELYTRA_DIR/srv/elytra/logs/"
+      update_config "data" "$ELYTRA_DIR/srv/elytra/volumes"
+      update_config "archive_directory" "$ELYTRA_DIR/srv/elytra/archives"
+      update_config "backup_directory" "$ELYTRA_DIR/srv/elytra/backups"
+      update_config "tmp_directory" "$ELYTRA_DIR/srv/elytra/tmp/"
     fi
-    
-    echo "Saving Wings configuration file to '$WINGS_CONFIG'..."
-    echo "$CONFIG" > $WINGS_CONFIG
+
+    echo "Saving Elytra configuration file to '$ELYTRA_CONFIG'..."
+    echo "$CONFIG" > $ELYTRA_CONFIG
 
     # Mark setup as complete
     echo "DEV_SETUP=true" >> /app/.env
@@ -175,10 +216,6 @@ fi
 ## start cronjobs for the queue
 echo -e "Starting cron jobs."
 crond -L /var/log/crond -l 5
-
-# Fix permissions on logs
-chown -R www-data:www-data /app/storage
-chmod -R 775 /app/storage
 
 echo -e "Starting supervisord."
 exec "$@"

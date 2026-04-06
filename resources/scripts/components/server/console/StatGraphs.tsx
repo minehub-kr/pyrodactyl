@@ -1,5 +1,4 @@
-import { faCloudDownloadAlt, faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ArrowDownToLine, ArrowUpToLine } from '@gravity-ui/icons';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import { useEffect, useRef } from 'react';
 import { Line } from 'react-chartjs-2';
@@ -15,7 +14,7 @@ import { ServerContext } from '@/state/server';
 
 import useWebsocketEvent from '@/plugins/useWebsocketEvent';
 
-export default () => {
+const StatGraphs = () => {
     const status = ServerContext.useStoreState((state) => state.status.value);
     const limits = ServerContext.useStoreState((state) => state.server.data!.limits);
     const previous = useRef<Record<'tx' | 'rx', number>>({ tx: -1, rx: -1 });
@@ -111,9 +110,11 @@ export default () => {
                             <Tooltip.Root delayDuration={200}>
                                 <Tooltip.Trigger asChild>
                                     <div className='flex items-center cursor-default'>
-                                        <FontAwesomeIcon
-                                            icon={faCloudDownloadAlt}
-                                            className='mr-2 w-4 h-4 text-yellow-400'
+                                        <ArrowDownToLine
+                                            width={22}
+                                            height={22}
+                                            fill='currentColor'
+                                            className='mr-2 text-yellow-400'
                                         />
                                     </div>
                                 </Tooltip.Trigger>
@@ -132,7 +133,12 @@ export default () => {
                             <Tooltip.Root delayDuration={200}>
                                 <Tooltip.Trigger asChild>
                                     <div className='flex items-center cursor-default'>
-                                        <FontAwesomeIcon icon={faCloudUploadAlt} className='w-4 h-4 text-blue-400' />
+                                        <ArrowUpToLine
+                                            width={22}
+                                            height={22}
+                                            fill='currentColor'
+                                            className='text-blue-400'
+                                        />
                                     </div>
                                 </Tooltip.Trigger>
                                 <Tooltip.Portal>
@@ -155,3 +161,5 @@ export default () => {
         </Tooltip.Provider>
     );
 };
+
+export default StatGraphs;

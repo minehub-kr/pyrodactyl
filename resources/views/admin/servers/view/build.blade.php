@@ -48,6 +48,14 @@
                         <p class="text-muted small">The maximum amount of memory allowed for this container. Setting this to <code>0</code> will allow unlimited memory in a container.</p>
                     </div>
                     <div class="form-group">
+                        <label for="overhead_memory" class="control-label">Overhead Memory</label>
+                        <div class="input-group">
+                            <input type="text" name="overhead_memory" data-multiplicator="true" class="form-control" value="{{ old('overhead_memory', $server->overhead_memory) }}"/>
+                            <span class="input-group-addon">MiB</span>
+                        </div>
+                        <p class="text-muted small">Additional memory allocated to the container that doesn't go to the SERVER_MEMORY variable. Setting to <code>0</code> disables overhead memory.</p>
+                    </div>
+                    <div class="form-group">
                         <label for="swap" class="control-label">Allocated Swap</label>
                         <div class="input-group">
                             <input type="text" name="swap" data-multiplicator="true" class="form-control" value="{{ old('swap', $server->swap) }}"/>
@@ -86,6 +94,22 @@
                             </p>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="exclude_from_resource_calculation" class="control-label">Resource Calculation</label>
+                        <div>
+                            <div class="radio radio-success radio-inline">
+                                <input type="radio" id="pResourceCalcIncluded" value="0" name="exclude_from_resource_calculation" @if(!$server->exclude_from_resource_calculation)checked @endif>
+                                <label for="pResourceCalcIncluded">Included</label>
+                            </div>
+                            <div class="radio radio-warning radio-inline">
+                                <input type="radio" id="pResourceCalcExcluded" value="1" name="exclude_from_resource_calculation" @if($server->exclude_from_resource_calculation)checked @endif>
+                                <label for="pResourceCalcExcluded">Excluded</label>
+                            </div>
+                            <p class="text-muted small">
+                                When enabled, this server will not be included in resource calculations when provisioning new servers onto this node. Useful for testing or development servers.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -103,21 +127,29 @@
                                     <div>
                                         <input type="text" name="database_limit" class="form-control" value="{{ old('database_limit', $server->database_limit) }}"/>
                                     </div>
-                                    <p class="text-muted small">The total number of databases a user is allowed to create for this server.</p>
+                                    <p class="text-muted small">The total number of databases a user is allowed to create for this server. Leave blank for unlimited, set to 0 to disable.</p>
                                 </div>
                                 <div class="form-group col-xs-6">
                                     <label for="allocation_limit" class="control-label">Allocation Limit</label>
                                     <div>
                                         <input type="text" name="allocation_limit" class="form-control" value="{{ old('allocation_limit', $server->allocation_limit) }}"/>
                                     </div>
-                                    <p class="text-muted small">The total number of allocations a user is allowed to create for this server.</p>
+                                    <p class="text-muted small">The total number of allocations a user is allowed to create for this server. Leave blank for unlimited, set to 0 to disable.</p>
                                 </div>
                                 <div class="form-group col-xs-6">
                                     <label for="backup_limit" class="control-label">Backup Limit</label>
                                     <div>
                                         <input type="text" name="backup_limit" class="form-control" value="{{ old('backup_limit', $server->backup_limit) }}"/>
                                     </div>
-                                    <p class="text-muted small">The total number of backups that can be created for this server.</p>
+                                    <p class="text-muted small">The total number of backups that can be created for this server. Leave blank for unlimited, set to 0 to disable.</p>
+                                </div>
+                                <div class="form-group col-xs-6">
+                                    <label for="backup_storage_limit" class="control-label">Backup Storage Limit</label>
+                                    <div class="input-group">
+                                        <input type="text" name="backup_storage_limit" data-multiplicator="true" class="form-control" value="{{ old('backup_storage_limit', $server->backup_storage_limit) }}"/>
+                                        <span class="input-group-addon">MiB</span>
+                                    </div>
+                                    <p class="text-muted small">The total storage space that can be used for backups. Leave blank for unlimited storage.</p>
                                 </div>
                             </div>
                         </div>

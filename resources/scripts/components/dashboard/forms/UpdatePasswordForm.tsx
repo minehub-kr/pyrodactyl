@@ -3,9 +3,10 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import { Fragment } from 'react';
 import * as Yup from 'yup';
 
+import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
+import Spinner from '@/components/elements/Spinner';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { Button } from '@/components/elements/button/index';
 
 import updateAccountPassword from '@/api/account/updateAccountPassword';
 import { httpErrorToHuman } from '@/api/http';
@@ -30,7 +31,7 @@ const schema = Yup.object().shape({
     ),
 });
 
-export default () => {
+const UpdatePasswordForm = () => {
     const user = useStoreState((state: State<ApplicationStore>) => state.user.data);
     const { clearFlashes, addFlash } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
 
@@ -93,7 +94,10 @@ export default () => {
                                 />
                             </div>
                             <div className={`mt-6`}>
-                                <Button disabled={isSubmitting || !isValid}>Update Password</Button>
+                                <ActionButton variant='primary' disabled={isSubmitting || !isValid}>
+                                    {isSubmitting && <Spinner size='small' />}
+                                    {isSubmitting ? 'Updating...' : 'Update Password'}
+                                </ActionButton>
                             </div>
                         </Form>
                     </Fragment>
@@ -102,3 +106,5 @@ export default () => {
         </Fragment>
     );
 };
+
+export default UpdatePasswordForm;

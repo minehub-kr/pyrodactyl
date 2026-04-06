@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ActionButton from '@/components/elements/ActionButton';
 import Modal from '@/components/elements/Modal';
-import { Button } from '@/components/elements/button/index';
 import { SocketEvent, SocketRequest } from '@/components/server/events';
 
 import saveFileContents from '@/api/server/files/saveFileContents';
@@ -83,8 +83,12 @@ const EulaModalFeature = () => {
                     에 동의해야 해요.
                 </p>
                 <div className={`my-6 gap-3 flex items-center justify-end`}>
-                    <Button.Text onClick={() => setVisible(false)}>동의하지 않기</Button.Text>
-                    <Button onClick={onAcceptEULA}>동의</Button>
+                    <ActionButton variant='secondary' onClick={() => setVisible(false)}>
+                        동의하지 않습니다
+                    </ActionButton>
+                    <ActionButton variant='primary' onClick={onAcceptEULA}>
+                        동의합니다
+                    </ActionButton>
                 </div>
             </div>
         </Modal>

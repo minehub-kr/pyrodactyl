@@ -11,7 +11,7 @@ return [
   | change this value if you are not maintaining your own internal versions.
   */
 
-  'version' => 'v3.0.16',
+  'version' => 'canary',
 
   /*
   |--------------------------------------------------------------------------
@@ -196,10 +196,14 @@ return [
     Pterodactyl\Providers\AuthServiceProvider::class,
     Pterodactyl\Providers\BackupsServiceProvider::class,
     Pterodactyl\Providers\BladeServiceProvider::class,
+    Pterodactyl\Providers\CaptchaServiceProvider::class,
     Pterodactyl\Providers\EventServiceProvider::class,
     Pterodactyl\Providers\HashidsServiceProvider::class,
+    Pterodactyl\Providers\ObserverServiceProvider::class,
     Pterodactyl\Providers\RouteServiceProvider::class,
     Pterodactyl\Providers\RepositoryServiceProvider::class,
+    Pterodactyl\Providers\ServerOperationServiceProvider::class,
+    Pterodactyl\Providers\SubdomainServiceProvider::class,
     Pterodactyl\Providers\ViewComposerServiceProvider::class,
 
     /*

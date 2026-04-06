@@ -2,13 +2,13 @@ import { useStoreState } from 'easy-peasy';
 import isEqual from 'react-fast-compare';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ActionButton from '@/components/elements/ActionButton';
 import Can from '@/components/elements/Can';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import Label from '@/components/elements/Label';
 import { MainPageHeader } from '@/components/elements/MainPageHeader';
 import ServerContentBlock from '@/components/elements/ServerContentBlock';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
-import { Button } from '@/components/elements/button/index';
 import ReinstallServerBox from '@/components/server/settings/ReinstallServerBox';
 
 import { ip } from '@/lib/formatters';
@@ -17,7 +17,7 @@ import { ServerContext } from '@/state/server';
 
 import RenameServerBox from './RenameServerBox';
 
-export default () => {
+const SettingsContainer = () => {
     const username = useStoreState((state) => state.user.data!.username);
     const id = ServerContext.useStoreState((state) => state.server.data!.id);
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
@@ -27,7 +27,12 @@ export default () => {
     return (
         <ServerContentBlock title={'설정'}>
             <FlashMessageRender byKey={'settings'} />
-            <MainPageHeader title={'설정'} />
+            <MainPageHeader direction='column' title={'Settings'}>
+                <p className='text-sm text-neutral-400 leading-relaxed'>
+                    Configure your server settings, manage SFTP access, and access debug information. Make changes to
+                    server name and reinstall when needed.
+                </p>
+            </MainPageHeader>
             <Can action={'settings.rename'}>
                 <div className={`mb-6 md:mb-10`}>
                     <RenameServerBox />
@@ -78,7 +83,7 @@ export default () => {
                             </div>
                             <div className={`ml-4`}>
                                 <a href={`sftp://${username}.${id}@${ip(sftp.ip)}:${sftp.port}`}>
-                                    <Button.Text variant={Button.Variants.Secondary}>SFTP 실행</Button.Text>
+                                    <ActionButton variant='secondary'>Launch SFTP</ActionButton>
                                 </a>
                             </div>
                         </div>
@@ -88,3 +93,5 @@ export default () => {
         </ServerContentBlock>
     );
 };
+
+export default SettingsContainer;

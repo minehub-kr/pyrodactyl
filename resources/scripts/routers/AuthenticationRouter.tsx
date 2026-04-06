@@ -7,7 +7,7 @@ import LoginContainerWithId from '@/components/auth/LoginContainerWithId';
 import ResetPasswordContainer from '@/components/auth/ResetPasswordContainer';
 import { NotFound } from '@/components/elements/ScreenBlock';
 
-export default () => {
+const AuthenticationRouter = () => {
     return (
         <div
             style={{
@@ -26,3 +26,5 @@ export default () => {
         </div>
     );
 };
+
+export default AuthenticationRouter;

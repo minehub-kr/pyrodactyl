@@ -2,20 +2,24 @@
 
 namespace Pterodactyl\Models;
 
-use Illuminate\Support\Str;
 use Symfony\Component\Yaml\Yaml;
 use Illuminate\Container\Container;
+use Illuminate\Support\Facades\Log;
+use Pterodactyl\Enums\Daemon\DaemonType;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Encryption\Encrypter;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Pterodactyl\Contracts\Daemon\Daemon as DaemonInterface;
+use Pterodactyl\Http\Controllers\Admin\NodeAutoDeployController;
 
 /**
  * @property int $id
  * @property string $uuid
  * @property bool $public
+ * @property bool $trust_alias
  * @property string $name
  * @property string|null $description
  * @property int $location_id
@@ -35,6 +39,8 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @property int $daemonListen
  * @property int $daemonSFTP
  * @property string $daemonBase
+ * @property string $daemonType
+ * @property string $backupDisk
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property Location $location
@@ -42,6 +48,7 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
  * @property \Pterodactyl\Models\Server[]|\Illuminate\Database\Eloquent\Collection $servers
  * @property \Pterodactyl\Models\Allocation[]|\Illuminate\Database\Eloquent\Collection $allocations
  */
+
 class Node extends Model
 {
     /** @use HasFactory<\Database\Factories\NodeFactory> */
@@ -78,6 +85,7 @@ class Node extends Model
         'daemonSFTP' => 'integer',
         'behind_proxy' => 'boolean',
         'public' => 'boolean',
+        'trust_alias' => 'boolean',
         'maintenance_mode' => 'boolean',
         'use_separate_fqdns' => 'boolean',
     ];
@@ -86,7 +94,9 @@ class Node extends Model
      * Fields that are mass assignable.
      */
     protected $fillable = [
+        'uuid',
         'public',
+        'trust_alias',
         'name',
         'location_id',
         'fqdn',
@@ -102,8 +112,12 @@ class Node extends Model
         'daemonBase',
         'daemonSFTP',
         'daemonListen',
+        'daemon_token_id',
+        'daemon_token',
         'description',
         'maintenance_mode',
+        'daemonType',
+        'backupDisk'
     ];
 
     public static array $validationRules = [
@@ -111,6 +125,7 @@ class Node extends Model
         'description' => 'string|nullable',
         'location_id' => 'required|exists:locations,id',
         'public' => 'boolean',
+        'trust_alias' => 'boolean',
         'fqdn' => 'required|string',
         'internal_fqdn' => 'nullable|string',
         'use_separate_fqdns' => 'sometimes|boolean',
@@ -125,6 +140,8 @@ class Node extends Model
         'daemonListen' => 'required|numeric|between:1,65535',
         'maintenance_mode' => 'boolean',
         'upload_size' => 'int|between:1,1024',
+        'daemonType' => 'required|string',
+        'backupDisk' => 'required|string'
     ];
 
     /**
@@ -132,6 +149,7 @@ class Node extends Model
      */
     protected $attributes = [
         'public' => true,
+        'trust_alias' => false,
         'behind_proxy' => false,
         'memory_overallocate' => 0,
         'disk_overallocate' => 0,
@@ -141,6 +159,23 @@ class Node extends Model
         'maintenance_mode' => false,
         'use_separate_fqdns' => false,
     ];
+
+
+    private function getDaemonImplementation(): DaemonInterface
+    {
+        $implementations = DaemonType::allClass();
+
+        $daemonType = strtolower($this->daemonType);
+
+        if (!isset($implementations[$daemonType])) {
+
+            return new \Pterodactyl\Models\Daemons\Elytra();
+        }
+
+        $implementationClass = $implementations[$daemonType];
+        return new $implementationClass();
+    }
+
 
     /**
      * Get the connection address to use when making calls to this node.
@@ -180,30 +215,17 @@ class Node extends Model
      */
     public function getConfiguration(): array
     {
-        return [
-            'debug' => false,
-            'uuid' => $this->uuid,
-            'token_id' => $this->daemon_token_id,
-            'token' => Container::getInstance()->make(Encrypter::class)->decrypt($this->daemon_token),
-            'api' => [
-                'host' => '0.0.0.0',
-                'port' => $this->daemonListen,
-                'ssl' => [
-                    'enabled' => (!$this->behind_proxy && $this->scheme === 'https'),
-                    'cert' => '/etc/letsencrypt/live/' . Str::lower($this->getInternalFqdn()) . '/fullchain.pem',
-                    'key' => '/etc/letsencrypt/live/' . Str::lower($this->getInternalFqdn()) . '/privkey.pem',
-                ],
-                'upload_limit' => $this->upload_size,
-            ],
-            'system' => [
-                'data' => $this->daemonBase,
-                'sftp' => [
-                    'bind_port' => $this->daemonSFTP,
-                ],
-            ],
-            'allowed_mounts' => $this->mounts->pluck('source')->toArray(),
-            'remote' => route('index'),
-        ];
+        $daemon = $this->getDaemonImplementation();
+        return $daemon->getConfiguration($this);
+    }
+
+    /**
+     * Returns the auto deploy command as a string.
+     */
+    public function getAutoDeploy(string $token): string
+    {
+        $daemon = $this->getDaemonImplementation();
+        return $daemon->getAutoDeploy($this, $token);
     }
 
     /**
@@ -274,6 +296,10 @@ class Node extends Model
         $memoryLimit = $this->memory * (1 + ($this->memory_overallocate / 100));
         $diskLimit = $this->disk * (1 + ($this->disk_overallocate / 100));
 
-        return ($this->sum_memory + $memory) <= $memoryLimit && ($this->sum_disk + $disk) <= $diskLimit;
+        // Calculate used resources excluding servers marked for exclusion
+        $usedMemory = $this->servers()->where('exclude_from_resource_calculation', false)->sum('memory');
+        $usedDisk = $this->servers()->where('exclude_from_resource_calculation', false)->sum('disk');
+
+        return ($usedMemory + $memory) <= $memoryLimit && ($usedDisk + $disk) <= $diskLimit;
     }
 }

@@ -9,6 +9,7 @@ use Illuminate\Database\ConnectionInterface;
 use Pterodactyl\Repositories\Wings\DaemonServerRepository;
 use Pterodactyl\Services\Databases\DatabaseManagementService;
 use Pterodactyl\Exceptions\Http\Connection\DaemonConnectionException;
+use Pterodactyl\Exceptions\Service\Backup\BackupLockedException;
 
 class ServerDeletionService
 {
@@ -57,6 +58,32 @@ class ServerDeletionService
         }
 
         $this->connection->transaction(function () use ($server) {
+            // Delete all backups associated with this server
+            foreach ($server->backups as $backup) {
+                try {
+                    // Simply delete the backup record
+                    // note: this used to be more complex but Elytra's changes have made a lot of logic here redundant
+                    // so this whole thing really needs a refactor now. THAT BEING SAID I HAVE NOT TESTED LOCAL IN A MINUTE!
+                    // - ellie 
+                    $backup->delete();
+                } catch (\Exception $exception) {
+                    if (!$this->force) {
+                        throw $exception;
+                    }
+
+                    // If we can't delete the backup from storage, at least remove the database record
+                    // to prevent orphaned backup entries
+                    $backup->delete();
+
+                    Log::warning('Failed to delete backup during server deletion', [
+                        'backup_id' => $backup->id,
+                        'backup_uuid' => $backup->uuid,
+                        'server_id' => $server->id,
+                        'exception' => $exception->getMessage(),
+                    ]);
+                }
+            }
+
             foreach ($server->databases as $database) {
                 try {
                     $this->databaseManagementService->delete($database);

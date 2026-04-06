@@ -1,8 +1,8 @@
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useEffect, useState } from 'react';
 
+import ActionButton from '@/components/elements/ActionButton';
 import TitledGreyBox from '@/components/elements/TitledGreyBox';
-import { Button } from '@/components/elements/button/index';
 import { Dialog } from '@/components/elements/dialog';
 
 import { httpErrorToHuman } from '@/api/http';
@@ -11,12 +11,14 @@ import reinstallServer from '@/api/server/reinstallServer';
 import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 
-export default () => {
+const ReinstallServerBox = () => {
     const uuid = ServerContext.useStoreState((state) => state.server.data!.uuid);
     const [modalVisible, setModalVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
     const { addFlash, clearFlashes } = useStoreActions((actions: Actions<ApplicationStore>) => actions.flashes);
 
     const reinstall = () => {
+        setLoading(true);
         clearFlashes('settings');
         reinstallServer(uuid)
             .then(() => {
@@ -31,7 +33,10 @@ export default () => {
 
                 addFlash({ key: 'settings', type: 'error', message: httpErrorToHuman(error) });
             })
-            .then(() => setModalVisible(false));
+            .then(() => {
+                setLoading(false);
+                setModalVisible(false);
+            });
     };
 
     useEffect(() => {
@@ -46,6 +51,7 @@ export default () => {
                 confirm={'서버 재설치'}
                 onClose={() => setModalVisible(false)}
                 onConfirmed={reinstall}
+                loading={loading}
             >
                 서버가 중지되고 이 과정에서 일부 파일이 삭제되거나 수정될 수 있어요. 계속할까요?
             </Dialog.Confirm>
@@ -56,10 +62,12 @@ export default () => {
                 </strong>
             </p>
             <div className={`mt-6 text-right`}>
-                <Button.Danger variant={Button.Variants.Secondary} onClick={() => setModalVisible(true)}>
-                    서버 재설치
-                </Button.Danger>
+                <ActionButton variant='danger' onClick={() => setModalVisible(true)}>
+                    Reinstall Server
+                </ActionButton>
             </div>
         </TitledGreyBox>
     );
 };
+
+export default ReinstallServerBox;

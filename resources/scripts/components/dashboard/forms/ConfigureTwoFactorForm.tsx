@@ -4,21 +4,21 @@ import { useEffect, useState } from 'react';
 import DisableTOTPDialog from '@/components/dashboard/forms/DisableTOTPDialog';
 import RecoveryTokensDialog from '@/components/dashboard/forms/RecoveryTokensDialog';
 import SetupTOTPDialog from '@/components/dashboard/forms/SetupTOTPDialog';
-import { Button } from '@/components/elements/button/index';
+import ActionButton from '@/components/elements/ActionButton';
 
 import { ApplicationStore } from '@/state';
 
-import { useFlashKey } from '@/plugins/useFlash';
+import useFlash from '@/plugins/useFlash';
 
-export default () => {
+const ConfigureTwoFactorForm = () => {
     const [tokens, setTokens] = useState<string[]>([]);
     const [visible, setVisible] = useState<'enable' | 'disable' | null>(null);
     const isEnabled = useStoreState((state: ApplicationStore) => state.user.data!.useTotp);
-    const { clearAndAddHttpError } = useFlashKey('account:two-step');
+    const { clearFlashes } = useFlash();
 
     useEffect(() => {
         return () => {
-            clearAndAddHttpError();
+            clearFlashes('account:two-step');
         };
     }, [visible]);
 
@@ -39,11 +39,17 @@ export default () => {
             </p>
             <div className={`mt-6`}>
                 {isEnabled ? (
-                    <Button.Danger onClick={() => setVisible('disable')}>Remove Authenticator App</Button.Danger>
+                    <ActionButton variant='danger' onClick={() => setVisible('disable')}>
+                        Remove Authenticator App
+                    </ActionButton>
                 ) : (
-                    <Button onClick={() => setVisible('enable')}>Enable Authenticator App</Button>
+                    <ActionButton variant='primary' onClick={() => setVisible('enable')}>
+                        Enable Authenticator App
+                    </ActionButton>
                 )}
             </div>
         </div>
     );
 };
+
+export default ConfigureTwoFactorForm;

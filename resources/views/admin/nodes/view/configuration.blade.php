@@ -17,7 +17,7 @@
 @section('content')
 <div class="row">
     <div class="col-xs-12">
-        <div class="nav-tabs-custom nav-tabs-floating">
+       <div class="nav-tabs-custom nav-tabs-floating">
             <ul class="nav nav-tabs">
                 <li><a href="{{ route('admin.nodes.view', $node->id) }}">About</a></li>
                 <li><a href="{{ route('admin.nodes.view.settings', $node->id) }}">Settings</a></li>
@@ -38,7 +38,7 @@
                 <pre class="no-margin">{{ $node->getYamlConfiguration() }}</pre>
             </div>
             <div class="box-footer">
-                <p class="no-margin">This file should be placed in your daemon's root directory (usually <code>/etc/pterodactyl</code>) in a file called <code>config.yml</code>.</p>
+                <p class="no-margin">This file should be placed in your daemon's root directory (usually <code>/etc/elytra</code>) in a file called <code>config.yml</code>.</p>
             </div>
         </div>
     </div>
@@ -50,7 +50,7 @@
             <div class="box-body">
                 <p class="text-muted small">
                     Use the button below to generate a custom deployment command that can be used to configure
-                    wings on the target server with a single command.
+                    elytra on the target server with a single command.
                 </p>
             </div>
             <div class="box-footer">
@@ -70,11 +70,14 @@
             url: '{{ route('admin.nodes.view.configuration.token', $node->id) }}',
             headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
         }).done(function (data) {
+
+            var commandTemplate = "{!! addslashes($node->getAutoDeploy("PLACEHOLDER_TOKEN")) !!}";
+            var command = commandTemplate.replace('PLACEHOLDER_TOKEN', data.token);
             swal({
                 type: 'success',
                 title: 'Token created.',
-                text: '<p>To auto-configure your node run the following command:<br /><small><pre>cd /etc/pterodactyl && sudo wings configure --panel-url {{ config('app.url') }} --token ' + data.token + ' --node ' + data.node + '{{ config('app.debug') ? ' --allow-insecure' : '' }}</pre></small></p>',
-                html: true
+                text: "<p>To auto-configure your node run the following command:<br /><small><pre>" + command + "</pre></small></p>",
+                html: true,
             })
         }).fail(function () {
             swal({

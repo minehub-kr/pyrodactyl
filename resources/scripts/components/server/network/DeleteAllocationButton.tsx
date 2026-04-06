@@ -1,5 +1,7 @@
+import { TrashBin } from '@gravity-ui/icons';
 import { useState } from 'react';
 
+import ActionButton from '@/components/elements/ActionButton';
 import { Dialog } from '@/components/elements/dialog';
 
 import deleteServerAllocation from '@/api/server/network/deleteServerAllocation';
@@ -47,7 +49,9 @@ const DeleteAllocationButton = ({ allocation }: Props) => {
             >
                 이 할당은 서버에서 즉시 제거됩니다.
             </Dialog.Confirm>
-            <button onClick={() => setConfirm(true)}>삭제</button>
+            <button className='cursor-pointer' onClick={() => setConfirm(true)}>
+                삭제
+            </button>
         </>
     );
 };

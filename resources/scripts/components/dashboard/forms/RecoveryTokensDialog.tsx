@@ -1,13 +1,13 @@
+import ActionButton from '@/components/elements/ActionButton';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import { Alert } from '@/components/elements/alert';
-import { Button } from '@/components/elements/button/index';
 import { Dialog, DialogProps } from '@/components/elements/dialog';
 
 interface RecoveryTokenDialogProps extends DialogProps {
     tokens: string[];
 }
 
-export default ({ tokens, open, onClose }: RecoveryTokenDialogProps) => {
+const RecoveryTokensDialog = ({ tokens, open, onClose }: RecoveryTokenDialogProps) => {
     const grouped = [] as [string, string][];
     tokens.forEach((token, index) => {
         if (index % 2 === 0) {
@@ -43,8 +43,12 @@ export default ({ tokens, open, onClose }: RecoveryTokenDialogProps) => {
                 These codes will not be shown again.
             </Alert>
             <Dialog.Footer>
-                <Button.Text onClick={onClose}>Done</Button.Text>
+                <ActionButton variant='primary' onClick={onClose}>
+                    Done
+                </ActionButton>
             </Dialog.Footer>
         </Dialog>
     );
 };
+
+export default RecoveryTokensDialog;

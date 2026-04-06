@@ -1,13 +1,12 @@
+import { Xmark } from '@gravity-ui/icons';
 import { Dialog as HDialog } from '@headlessui/react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import { useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
+import ActionButton from '@/components/elements/ActionButton';
 import Spinner from '@/components/elements/Spinner';
-import { Button } from '@/components/elements/button/index';
 import { DialogContext, IconPosition, styles } from '@/components/elements/dialog';
-
-import HugeIconsX from './hugeicons/X';
 
 const variants = {
     open: {
@@ -145,7 +144,7 @@ const Modal: React.FC<ModalProps> = ({
                                                     onClick={onDismissed}
                                                     className={'opacity-45 hover:opacity-100 p-6 -m-6 cursor-pointer'}
                                                 >
-                                                    <HugeIconsX fill='currentColor' />
+                                                    <Xmark width={22} height={22} fill='currentColor' />
                                                 </button>
                                             )}
                                         </div>
@@ -164,9 +163,9 @@ const Modal: React.FC<ModalProps> = ({
                                                 </div>
                                                 {closeButton && (
                                                     <div className={`my-6 sm:flex items-center justify-end`}>
-                                                        <Button onClick={onDismissed} className={`min-w-full`}>
+                                                        <ActionButton onClick={onDismissed} className={`min-w-full`}>
                                                             <div>Close</div>
-                                                        </Button>
+                                                        </ActionButton>
                                                     </div>
                                                 )}
                                             </div>

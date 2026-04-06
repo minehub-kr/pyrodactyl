@@ -5,9 +5,9 @@ import { QRCodeSVG } from 'qrcode.react';
 import { useContext, useEffect, useState } from 'react';
 
 import FlashMessageRender from '@/components/FlashMessageRender';
+import ActionButton from '@/components/elements/ActionButton';
 import CopyOnClick from '@/components/elements/CopyOnClick';
 import Spinner from '@/components/elements/Spinner';
-import { Button } from '@/components/elements/button/index';
 import { Dialog, DialogWrapperContext } from '@/components/elements/dialog';
 import { Input } from '@/components/elements/inputs';
 
@@ -105,7 +105,9 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
                 onChange={(e) => setPassword(e.currentTarget.value)}
             />
             <Dialog.Footer>
-                <Button.Text onClick={close}>Cancel</Button.Text>
+                <ActionButton variant='secondary' onClick={close}>
+                    Cancel
+                </ActionButton>
                 {/* <Tooltip
                     disabled={password.length > 0 && value.length === 6}
                     content={
@@ -115,13 +117,14 @@ const ConfigureTwoFactorForm = ({ onTokens }: Props) => {
                     }
                     delay={100}
                 > */}
-                <Button
+                <ActionButton
+                    variant='primary'
                     disabled={!token || value.length !== 6 || !password.length}
                     type={'submit'}
                     form={'enable-totp-form'}
                 >
                     Enable
-                </Button>
+                </ActionButton>
                 {/* </Tooltip> */}
             </Dialog.Footer>
         </form>

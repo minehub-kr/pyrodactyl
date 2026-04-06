@@ -1,8 +1,8 @@
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { TrashBin } from '@gravity-ui/icons';
 import { Actions, useStoreActions } from 'easy-peasy';
 import { useState } from 'react';
 
+import ActionButton from '@/components/elements/ActionButton';
 import ConfirmationModal from '@/components/elements/ConfirmationModal';
 
 import { httpErrorToHuman } from '@/api/http';
@@ -12,7 +12,7 @@ import { ApplicationStore } from '@/state';
 import { ServerContext } from '@/state/server';
 import { Subuser } from '@/state/server/subusers';
 
-export default ({ subuser }: { subuser: Subuser }) => {
+const RemoveSubuserButton = ({ subuser }: { subuser: Subuser }) => {
     const [loading, setLoading] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
 
@@ -42,21 +42,24 @@ export default ({ subuser }: { subuser: Subuser }) => {
                 title={`Remove ${subuser.username}?`}
                 buttonText={`Remove ${subuser.username}`}
                 visible={showConfirmation}
-                showSpinnerOverlay={loading}
+                loading={loading}
                 onConfirmed={() => doDeletion()}
                 onModalDismissed={() => setShowConfirmation(false)}
             >
                 All access to the server will be removed immediately.
             </ConfirmationModal>
-            <button
-                type={'button'}
-                aria-label={'Delete subuser'}
-                className={`text-sm p-2 text-zinc-500 hover:text-red-600 transition-colors duration-150 flex align-middle items-center justify-center flex-col cursor-pointer`}
+            <ActionButton
+                variant='danger'
+                size='sm'
+                className='flex items-center gap-2'
                 onClick={() => setShowConfirmation(true)}
+                aria-label='Delete subuser'
             >
-                <FontAwesomeIcon icon={faTrashAlt} className={`px-5`} size='lg' />
+                <TrashBin width={22} height={22} fill='currentColor' className='w-4 h-4' />
                 Delete
-            </button>
+            </ActionButton>
         </>
     );
 };
+
+export default RemoveSubuserButton;

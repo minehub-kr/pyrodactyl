@@ -3,9 +3,9 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import { Fragment } from 'react';
 import * as Yup from 'yup';
 
+import ActionButton from '@/components/elements/ActionButton';
 import Field from '@/components/elements/Field';
 import SpinnerOverlay from '@/components/elements/SpinnerOverlay';
-import { Button } from '@/components/elements/button/index';
 
 import { httpErrorToHuman } from '@/api/http';
 
@@ -21,7 +21,7 @@ const schema = Yup.object().shape({
     password: Yup.string().required('You must provide your current account password.'),
 });
 
-export default () => {
+const UpdateEmailAddressForm = () => {
     const user = useStoreState((state: State<ApplicationStore>) => state.user.data);
     const updateEmail = useStoreActions((state: Actions<ApplicationStore>) => state.user.updateUserEmail);
 
@@ -60,15 +60,12 @@ export default () => {
                     <Form className={`m-0`}>
                         <Field id={'current_email'} type={'email'} name={'email'} label={'Email'} />
                         <div className={`mt-6`}>
-                            <Field
-                                id={'confirm_password'}
-                                type={'password'}
-                                name={'password'}
-                                label={'Confirm Password'}
-                            />
+                            <Field id={'confirm_password'} type={'password'} name={'password'} label={'Password'} />
                         </div>
                         <div className={`mt-6`}>
-                            <Button disabled={isSubmitting || !isValid}>Update Email</Button>
+                            <ActionButton variant='primary' disabled={isSubmitting || !isValid}>
+                                Update Email
+                            </ActionButton>
                         </div>
                     </Form>
                 </Fragment>
@@ -76,3 +73,5 @@ export default () => {
         </Formik>
     );
 };
+
+export default UpdateEmailAddressForm;
