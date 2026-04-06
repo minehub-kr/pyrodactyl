@@ -16,9 +16,7 @@ const LoginContainer = () => {
     const onLogin = useCallback(async () => {
         try {
             await http.post('/crongify/auth', { code });
-
-            // @ts-ignore
-            window.location = '/';
+            window.location.href = '/';
         } catch (err) {
             setMessage('스텔라 IT와 연결하는 도중, 문제가 발생하였습니다. 잠시 후 다시 시도해주세요.');
         }
