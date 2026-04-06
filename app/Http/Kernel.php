@@ -69,6 +69,11 @@ class Kernel extends HttpKernel
             AddQueuedCookiesToResponse::class,
             /* StartSession::class, */
             /* EnsureStatefulRequests::class, */
+            
+            // Crongify Support
+            StartSession::class,
+            EnsureStatefulRequests::class,
+
             'auth:sanctum',
             IsValidJson::class,
             TrackAPIKey::class,
